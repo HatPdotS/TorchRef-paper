@@ -1,7 +1,29 @@
-# Override root .gitignore rules for paper assets
+# Assets that TorchRef's root .gitignore excluded are tracked here on purpose.
 !*.png
 !*.json
 !*.csv
 !*.mtz
 !*.pdb
 !*.cif
+
+# Too large for git; see README ("What is and is not in this repository").
+figure2_alphafold_start/afdb/
+figure2_alphafold_start/fasta/
+figure2_alphafold_start/placed/
+figure2_alphafold_start/search_models/
+figure2_alphafold_start/runs/
+figure2_alphafold_start/slurm/
+
+__pycache__/
+.DS_Store
+
+# LaTeX build products
+manuscript/*.aux
+manuscript/*.log
+manuscript/*.out
+manuscript/*.fls
+manuscript/*.fdb_latexmk
+manuscript/*.synctex.gz
+manuscript/*.blg
+manuscript/torchref.pdf
+manuscript/supplementary.pdf

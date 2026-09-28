@@ -1,0 +1,42 @@
+cff-version: 1.2.0
+message: "If you use these scripts or data, please cite the article below."
+title: "TorchRef paper: scripts, data and accepted manuscript"
+type: dataset
+authors:
+  - family-names: Seidel
+    given-names: Hans-Peter
+    orcid: "https://orcid.org/0009-0005-4194-6833"
+    affiliation: "Center for Life Sciences, Paul Scherrer Institut"
+  - family-names: Standfuss
+    given-names: Jörg
+    orcid: "https://orcid.org/0000-0001-8825-386X"
+    affiliation: "Center for Life Sciences, Paul Scherrer Institut"
+  - family-names: Weinert
+    given-names: Tobias
+    orcid: "https://orcid.org/0000-0002-0339-3722"
+    affiliation: "Center for Life Sciences, Paul Scherrer Institut"
+license:
+  - MIT
+  - CC-BY-4.0
+repository-code: "https://github.com/HatPdotS/TorchRef-paper"
+references:
+  - type: software
+    title: TorchRef
+    authors:
+      - family-names: Seidel
+        given-names: Hans-Peter
+    version: 0.6.4
+    repository-code: "https://github.com/HatPdotS/TorchRef"
+preferred-citation:
+  type: article
+  title: "TorchRef: An open-source PyTorch Framework for Crystallographic Refinement"
+  journal: "Journal of Applied Crystallography"
+  year: 2026
+  authors:
+    - family-names: Seidel
+      given-names: Hans-Peter
+    - family-names: Standfuss
+      given-names: Jörg
+    - family-names: Weinert
+      given-names: Tobias
+  # TODO: add volume, start, end and doi once published
