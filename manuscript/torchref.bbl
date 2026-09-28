@@ -1,0 +1,462 @@
+\begin{thebibliography}{52}
+\baselineskip=9pt\parskip=0pt
+
+\harvarditem[Adams \emph{et~al.}]{Adams, Afonine, Bunk{\'o}czi, Chen, Davis,
+  Echols, Headd, Hung, Kapral, Grosse-Kunstleve, McCoy, Moriarty, Oeffner,
+  Read, Richardson, Richardson, Terwilliger \harvardand\
+  Zwart}{2010}{adams_phenix_2010}
+Adams, P.~D., Afonine, P.~V., Bunk{\'o}czi, G., Chen, V.~B., Davis, I.~W.,
+  Echols, N., Headd, J.~J., Hung, L.-W., Kapral, G.~J., Grosse-Kunstleve,
+  R.~W., McCoy, A.~J., Moriarty, N.~W., Oeffner, R., Read, R.~J., Richardson,
+  D.~C., Richardson, J.~S., Terwilliger, T.~C. \harvardand\ Zwart, P.~H.
+  \harvardyearleft 2010\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Biological Crystallography},
+  \volbf{66}(2), 213--221.
+\newline\harvardurl{//journals.iucr.org/paper?dz5186}
+
+\harvarditem[Afonine \emph{et~al.}]{Afonine, Grosse-Kunstleve \harvardand\
+  Adams}{2005}{afonine_robust_2005}
+Afonine, P.~V., Grosse-Kunstleve, R.~W. \harvardand\ Adams, P.~D.
+  \harvardyearleft 2005\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Biological Crystallography},
+  \volbf{61}(7), 850--855.
+\newline\harvardurl{//journals.iucr.org/paper?gx5040}
+
+\harvarditem[Afonine \emph{et~al.}]{Afonine, Grosse-Kunstleve, Echols, Headd,
+  Moriarty, Mustyakimov, Terwilliger, Urzhumtsev, Zwart \harvardand\
+  Adams}{2012}{afonine_towards_2012}
+Afonine, P.~V., Grosse-Kunstleve, R.~W., Echols, N., Headd, J.~J., Moriarty,
+  N.~W., Mustyakimov, M., Terwilliger, T.~C., Urzhumtsev, A., Zwart, P.~H.
+  \harvardand\ Adams, P.~D.  \harvardyearleft 2012\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Biological Crystallography},
+  \volbf{68}(4), 352--367.
+\newline\harvardurl{https://journals.iucr.org/d/issues/2012/04/00/ba5180/}
+
+\harvarditem[Agirre \emph{et~al.}]{Agirre, Atanasova, Bagdonas, Ballard,
+  Basl{\'e}, Beilsten-Edmands, Borges, Brown, Burgos-M{\'a}rmol, Berrisford,
+  Bond, Caballero, Catapano, Chojnowski, Cook, Cowtan, Croll, Debreczeni,
+  Devenish, Dodson, Drevon, Emsley, Evans, Evans, Fando, Foadi,
+  Fuentes-Montero, Garman, Gerstel, Gildea, Hatti, Hekkelman, Heuser, Hoh,
+  Hough, Jenkins, Jim{\'e}nez, Joosten, Keegan, Keep, Krissinel, Kolenko,
+  Kovalevskiy, Lamzin, Lawson, Lebedev, Leslie, Lohkamp, Long, Mal{\'y}, McCoy,
+  McNicholas, Medina, Mill{\'a}n, Murray, Murshudov, Nicholls, Noble, Oeffner,
+  Pannu, Parkhurst, Pearce, Pereira, Perrakis, Powell, Read, Rigden, Rochira,
+  Sammito, S{\'a}nchez~Rodr{\'i}guez, Sheldrick, Shelley, Simkovic, Simpkin,
+  Skub{\'a}k, Sobolev, Steiner, Stevenson, Tews, Thomas, Thorn, Valls, Uski,
+  Us{\'o}n, Vagin, Velankar, Vollmar, Walden, Waterman, Wilson, Winn, Winter,
+  Wojdyr \harvardand\ Yamashita}{2023}{agirre_ccp4_2023}
+Agirre, J., Atanasova, M., Bagdonas, H., Ballard, C.~B., Basl{\'e}, A.,
+  Beilsten-Edmands, J., Borges, R.~J., Brown, D.~G., Burgos-M{\'a}rmol, J.~J.,
+  Berrisford, J.~M., Bond, P.~S., Caballero, I., Catapano, L., Chojnowski, G.,
+  Cook, A.~G., Cowtan, K.~D., Croll, T.~I., Debreczeni, J.~{\'E}., Devenish,
+  N.~E., Dodson, E.~J., Drevon, T.~R., Emsley, P., Evans, G., Evans, P.~R.,
+  Fando, M., Foadi, J., Fuentes-Montero, L., Garman, E.~F., Gerstel, M.,
+  Gildea, R.~J., Hatti, K., Hekkelman, M.~L., Heuser, P., Hoh, S.~W., Hough,
+  M.~A., Jenkins, H.~T., Jim{\'e}nez, E., Joosten, R.~P., Keegan, R.~M., Keep,
+  N., Krissinel, E.~B., Kolenko, P., Kovalevskiy, O., Lamzin, V.~S., Lawson,
+  D.~M., Lebedev, A.~A., Leslie, A. G.~W., Lohkamp, B., Long, F., Mal{\'y}, M.,
+  McCoy, A.~J., McNicholas, S.~J., Medina, A., Mill{\'a}n, C., Murray, J.~W.,
+  Murshudov, G.~N., Nicholls, R.~A., Noble, M. E.~M., Oeffner, R., Pannu,
+  N.~S., Parkhurst, J.~M., Pearce, N., Pereira, J., Perrakis, A., Powell,
+  H.~R., Read, R.~J., Rigden, D.~J., Rochira, W., Sammito, M.,
+  S{\'a}nchez~Rodr{\'i}guez, F., Sheldrick, G.~M., Shelley, K.~L., Simkovic,
+  F., Simpkin, A.~J., Skub{\'a}k, P., Sobolev, E., Steiner, R.~A., Stevenson,
+  K., Tews, I., Thomas, J. M.~H., Thorn, A., Valls, J.~T., Uski, V., Us{\'o}n,
+  I., Vagin, A., Velankar, S., Vollmar, M., Walden, H., Waterman, D., Wilson,
+  K.~S., Winn, M.~D., Winter, G., Wojdyr, M. \harvardand\ Yamashita, K.
+  \harvardyearleft 2023\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Structural Biology},
+  \volbf{79}(6), 449--461.
+
+\harvarditem[Ahdritz \emph{et~al.}]{Ahdritz, Bouatta, Floristean, Kadyan, Xia,
+  Gerecke, O'Donnell, Berenberg, Fisk, Zanichelli, Zhang, Nowaczynski, Wang,
+  Stepniewska-Dziubinska, Zhang, Ojewole, Guney, Biderman, Watkins, Ra,
+  Lorenzo, Nivon, Weitzner, Ban, Chen, Zhang, Li, Song, He, Sorger, Mostaque,
+  Zhang, Bonneau \harvardand\ AlQuraishi}{2024}{ahdritz_openfold_2024}
+Ahdritz, G., Bouatta, N., Floristean, C., Kadyan, S., Xia, Q., Gerecke, W.,
+  O'Donnell, T.~J., Berenberg, D., Fisk, I., Zanichelli, N., Zhang, B.,
+  Nowaczynski, A., Wang, B., Stepniewska-Dziubinska, M.~M., Zhang, S., Ojewole,
+  A., Guney, M.~E., Biderman, S., Watkins, A.~M., Ra, S., Lorenzo, P.~R.,
+  Nivon, L., Weitzner, B., Ban, Y.-E.~A., Chen, S., Zhang, M., Li, C., Song,
+  S.~L., He, Y., Sorger, P.~K., Mostaque, E., Zhang, Z., Bonneau, R.
+  \harvardand\ AlQuraishi, M.  \harvardyearleft 2024\harvardyearright{}.
+\newblock \emph{Nature Methods}, \volbf{21}(8), 1514--1524.
+\newline\harvardurl{https://www.nature.com/articles/s41592-024-02272-z}
+
+\harvarditem{AlQuraishi \harvardand\
+  Sorger}{2021}{alquraishi_differentiable_2021}
+AlQuraishi, M. \harvardand\ Sorger, P.~K.  \harvardyearleft
+  2021\harvardyearright{}.
+\newblock \emph{Nature Methods}, \volbf{18}(10), 1169--1180.
+\newline\harvardurl{https://www.nature.com/articles/s41592-021-01283-4}
+
+\harvarditem[Anstine \emph{et~al.}]{Anstine, Zubatyuk \harvardand\
+  Isayev}{2025}{anstine_aimnet2_2025}
+Anstine, D.~M., Zubatyuk, R. \harvardand\ Isayev, O.  \harvardyearleft
+  2025\harvardyearright{}.
+\newblock \emph{Chemical Science}, \volbf{16}(23), 10228--10244.
+\newline\harvardurl{https://pubs.rsc.org/en/content/articlelanding/2025/sc/d4sc08572h}
+
+\harvarditem[Barends \emph{et~al.}]{Barends, Stauch, Cherezov \harvardand\
+  Schlichting}{2022}{barends_serial_2022}
+Barends, T. R.~M., Stauch, B., Cherezov, V. \harvardand\ Schlichting, I.
+  \harvardyearleft 2022\harvardyearright{}.
+\newblock \emph{Nature Reviews Methods Primers}, \volbf{2}(1), 59.
+\newline\harvardurl{https://www.nature.com/articles/s43586-022-00141-7}
+
+\harvarditem{Berendzen \harvardand\
+  Terwilliger}{1995}{berendzen_difference_1995}
+Berendzen, J. \harvardand\ Terwilliger, T.~C.  \harvardyearleft
+  1995\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Biological Crystallography},
+  \volbf{51}(5), 609--618.
+
+\harvarditem[Blanc \emph{et~al.}]{Blanc, Roversi, Vonrhein, Flensburg, Lea
+  \harvardand\ Bricogne}{2004}{blanc_refinement_2004}
+Blanc, E., Roversi, P., Vonrhein, C., Flensburg, C., Lea, S.~M. \harvardand\
+  Bricogne, G.  \harvardyearleft 2004\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Biological Crystallography},
+  \volbf{60}(12), 2210--2221.
+\newline\harvardurl{//journals.iucr.org/paper?ba5067}
+
+\harvarditem[Bradbury \emph{et~al.}]{Bradbury, Frostig, Hawkins, Johnson,
+  Katariya, Leary, Maclaurin, Necula, Paszke, Vander{P}las, Wanderman-{M}ilne
+  \harvardand\ Zhang}{2018}{jax2018github}
+Bradbury, J., Frostig, R., Hawkins, P., Johnson, M.~J., Katariya, Y., Leary,
+  C., Maclaurin, D., Necula, G., Paszke, A., Vander{P}las, J.,
+  Wanderman-{M}ilne, S. \harvardand\ Zhang, Q.  \harvardyearleft
+  2018\harvardyearright{}.
+\newblock {JAX}: composable transformations of {P}ython+{N}um{P}y programs.
+\newline\harvardurl{http://github.com/jax-ml/jax}
+
+\harvarditem{Br{\"a}nd{\'e}n \harvardand\ Neutze}{2021}{branden_advances_2021}
+Br{\"a}nd{\'e}n, G. \harvardand\ Neutze, R.  \harvardyearleft
+  2021\harvardyearright{}.
+\newblock \emph{Science}, \volbf{373}(6558), eaba0954.
+\newline\harvardurl{https://www.science.org/doi/full/10.1126/science.aba0954}
+
+\harvarditem[Burley \emph{et~al.}]{Burley, Berman, Bhikadiya, Bi, Chen,
+  Di~Costanzo, Christie, Dalenberg, Duarte, Dutta, Feng, Ghosh, Goodsell,
+  Green, Guranovi{\'c}, Guzenko, Hudson, Kalro, Liang, Lowe, Namkoong, Peisach,
+  Periskova, Prli{\'c}, Randle, Rose, Rose, Sala, Sekharan, Shao, Tan, Tao,
+  Valasatava, Voigt, Westbrook, Woo, Yang, Young, Zhuravleva \harvardand\
+  Zardecki}{2019}{burley_rcsb_2019}
+Burley, S.~K., Berman, H.~M., Bhikadiya, C., Bi, C., Chen, L., Di~Costanzo, L.,
+  Christie, C., Dalenberg, K., Duarte, J.~M., Dutta, S., Feng, Z., Ghosh, S.,
+  Goodsell, D.~S., Green, R.~K., Guranovi{\'c}, V., Guzenko, D., Hudson, B.~P.,
+  Kalro, T., Liang, Y., Lowe, R., Namkoong, H., Peisach, E., Periskova, I.,
+  Prli{\'c}, A., Randle, C., Rose, A., Rose, P., Sala, R., Sekharan, M., Shao,
+  C., Tan, L., Tao, Y.-P., Valasatava, Y., Voigt, M., Westbrook, J., Woo, J.,
+  Yang, H., Young, J., Zhuravleva, M. \harvardand\ Zardecki, C.
+  \harvardyearleft 2019\harvardyearright{}.
+\newblock \emph{Nucleic Acids Research}, \volbf{47}(D1), D464--D474.
+\newline\harvardurl{https://doi.org/10.1093/nar/gky1004}
+
+\harvarditem{Chapman}{2019}{chapman_x-ray_2019}
+Chapman, H.~N.  \harvardyearleft 2019\harvardyearright{}.
+\newblock \emph{Annual Review of Biochemistry}, \volbf{88}(Volume 88, 2019),
+  35--58.
+\newline\harvardurl{https://www.annualreviews.org/content/journals/10.1146/annurev-biochem-013118-110744}
+
+\harvarditem{Clabbers \harvardand\ Xu}{2021}{clabbers_macromolecular_2021}
+Clabbers, M. T.~B. \harvardand\ Xu, H.  \harvardyearleft
+  2021\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Structural Biology},
+  \volbf{77}(3), 313--324.
+\newline\harvardurl{https://journals.iucr.org/d/issues/2021/03/00/ic5114/}
+
+\harvarditem[De~Zitter \emph{et~al.}]{De~Zitter, Coquelle, Oeser, Barends
+  \harvardand\ Colletier}{2022}{de_zitter_xtrapol8_2022}
+De~Zitter, E., Coquelle, N., Oeser, P., Barends, T. R.~M. \harvardand\
+  Colletier, J.-P.  \harvardyearleft 2022\harvardyearright{}.
+\newblock \emph{Communications Biology}, \volbf{5}(1), 640.
+\newline\harvardurl{https://www.nature.com/articles/s42003-022-03575-7}
+
+\harvarditem[Doerr \emph{et~al.}]{Doerr, Majewsk, P{\'e}rez, Kr{\"a}mer,
+  Clementi, Noe, Giorgino \harvardand\ Fabritiis}{2021}{doerr_torchmd_2021}
+Doerr, S., Majewsk, M., P{\'e}rez, A., Kr{\"a}mer, A., Clementi, C., Noe, F.,
+  Giorgino, T. \harvardand\ Fabritiis, G.~D.  \harvardyearleft
+  2021\harvardyearright{}.
+\newblock \emph{Journal of Chemical Theory and Computation}, \volbf{17}(4),
+  2355--2363.
+\newblock ArXiv:2012.12106 [physics].
+\newline\harvardurl{http://arxiv.org/abs/2012.12106}
+
+\harvarditem[Eastman \emph{et~al.}]{Eastman, Swails, Chodera, McGibbon, Zhao,
+  Beauchamp, Wang, Simmonett, Harrigan, Stern, Wiewiora, Brooks \harvardand\
+  Pande}{2017}{eastman_openmm_2017}
+Eastman, P., Swails, J., Chodera, J.~D., McGibbon, R.~T., Zhao, Y., Beauchamp,
+  K.~A., Wang, L.-P., Simmonett, A.~C., Harrigan, M.~P., Stern, C.~D.,
+  Wiewiora, R.~P., Brooks, B.~R. \harvardand\ Pande, V.~S.  \harvardyearleft
+  2017\harvardyearright{}.
+\newblock \emph{PLOS Computational Biology}, \volbf{13}(7), e1005659.
+
+\harvarditem[Fadini \emph{et~al.}]{Fadini, Apostolopoulou, Lane \harvardand\
+  van Thor}{2025}{fadini_denoising_2025}
+Fadini, A., Apostolopoulou, V., Lane, T.~J. \harvardand\ van Thor, J.~J.
+  \harvardyearleft 2025\harvardyearright{}.
+\newblock \emph{Communications Biology}, \volbf{8}(1), 1649.
+\newline\harvardurl{https://www.nature.com/articles/s42003-025-09031-6}
+
+\harvarditem[Fadini \emph{et~al.}]{Fadini, Li, McCoy, Banjara, Okumura, Napier,
+  Fontana, Khan, Jovine, Terwilliger, Read, Hekstra \harvardand\
+  AlQuraishi}{2026}{fadini_alphafold_2026}
+Fadini, A., Li, M., McCoy, A.~J., Banjara, S., Okumura, H., Napier, E.,
+  Fontana, P., Khan, A.~R., Jovine, L., Terwilliger, T.~C., Read, R.~J.,
+  Hekstra, D.~R. \harvardand\ AlQuraishi, M.  \harvardyearleft
+  2026\harvardyearright{}.
+\newblock \emph{Nature Methods}, \volbf{23}(4), 785--795.
+\newline\harvardurl{https://doi.org/10.1038/s41592-026-03047-4}
+
+\harvarditem{French \harvardand\ Wilson}{1978}{french_treatment_1978}
+French, S. \harvardand\ Wilson, K.  \harvardyearleft 1978\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section A: Crystal Physics, Diffraction,
+  Theoretical and General Crystallography}, \volbf{34}(4), 517--525.
+\newline\harvardurl{https://journals.iucr.org/a/issues/1978/04/00/a15572/}
+
+\harvarditem[Gasparotto \emph{et~al.}]{Gasparotto, Barba, Stadler, Assmann,
+  Mendon{\c c}a, Ashton, Janousch, Leonarski \harvardand\
+  B{\'e}jar}{2024}{gasparotto_toro_2024}
+Gasparotto, P., Barba, L., Stadler, H.-C., Assmann, G., Mendon{\c c}a, H.,
+  Ashton, A.~W., Janousch, M., Leonarski, F. \harvardand\ B{\'e}jar, B.
+  \harvardyearleft 2024\harvardyearright{}.
+\newblock \emph{Journal of Applied Crystallography}, \volbf{57}(4), 931--944.
+\newline\harvardurl{https://journals.iucr.org/j/issues/2024/04/00/jo5098/}
+
+\harvarditem[Greisman \emph{et~al.}]{Greisman, Dalton \harvardand\
+  Hekstra}{2021}{greisman_reciprocalspaceship_2021}
+Greisman, J.~B., Dalton, K.~M. \harvardand\ Hekstra, D.~R.  \harvardyearleft
+  2021\harvardyearright{}.
+\newblock \emph{Journal of Applied Crystallography}, \volbf{54}(5), 1521--1529.
+\newline\harvardurl{https://journals.iucr.org/j/issues/2021/05/00/te5079/}
+
+\harvarditem{Hekstra}{2023}{hekstra_emerging_2023}
+Hekstra, D.~R.  \harvardyearleft 2023\harvardyearright{}.
+\newblock \emph{Annual Review of Biophysics}, \volbf{52}(Volume 52, 2023),
+  255--274.
+\newline\harvardurl{https://www.annualreviews.org/content/journals/10.1146/annurev-biophys-111622-091155}
+
+\harvarditem[Henning~Hansen \emph{et~al.}]{Henning~Hansen, Orioli \harvardand\
+  Lindorff-Larsen}{2026}{henning_hansen_bayesian_2026}
+Henning~Hansen, C.~G., Orioli, S. \harvardand\ Lindorff-Larsen, K.
+  \harvardyearleft 2026\harvardyearright{}.
+\newblock \emph{ACS Physical Chemistry Au}.
+\newline\harvardurl{https://doi.org/10.1021/acsphyschemau.6c00050}
+
+\harvarditem[Khusainov \emph{et~al.}]{Khusainov, Standfuss \harvardand\
+  Weinert}{2024}{khusainov_time_2024}
+Khusainov, G., Standfuss, J. \harvardand\ Weinert, T.  \harvardyearleft
+  2024\harvardyearright{}.
+\newblock \emph{Structural Dynamics}, \volbf{11}(2), 020901.
+\newline\harvardurl{https://doi.org/10.1063/4.0000247}
+
+\harvarditem[Kov{\'a}cs \emph{et~al.}]{Kov{\'a}cs, Moore, Browning, Batatia,
+  Horton, Pu, Kapil, Witt, Magd{\u a}u, Cole \harvardand\
+  Cs{\'a}nyi}{2025}{kovacs_mace-off_2025}
+Kov{\'a}cs, D.~P., Moore, J.~H., Browning, N.~J., Batatia, I., Horton, J.~T.,
+  Pu, Y., Kapil, V., Witt, W.~C., Magd{\u a}u, I.-B., Cole, D.~J. \harvardand\
+  Cs{\'a}nyi, G.  \harvardyearleft 2025\harvardyearright{}.
+\newblock \emph{Journal of the American Chemical Society}, \volbf{147}(21),
+  17598--17611.
+\newline\harvardurl{https://doi.org/10.1021/jacs.4c07099}
+
+\harvarditem[Li \emph{et~al.}]{Li, Dalton \harvardand\
+  Hekstra}{2025}{Li2025.01.12.632630}
+Li, M., Dalton, K. \harvardand\ Hekstra, D.  \harvardyearleft
+  2025\harvardyearright{}.
+\newblock \emph{bioRxiv}.
+\newline\harvardurl{https://www.biorxiv.org/content/early/2025/01/19/2025.01.12.632630}
+
+\harvarditem[Liebschner \emph{et~al.}]{Liebschner, Afonine, Baker,
+  Bunk{\'o}czi, Chen, Croll, Hintze, Hung, Jain, McCoy, Moriarty, Oeffner,
+  Poon, Prisant, Read, Richardson, Richardson, Sammito, Sobolev, Stockwell,
+  Terwilliger, Urzhumtsev, Videau, Williams \harvardand\
+  Adams}{2019}{liebschner_macromolecular_2019}
+Liebschner, D., Afonine, P.~V., Baker, M.~L., Bunk{\'o}czi, G., Chen, V.~B.,
+  Croll, T.~I., Hintze, B., Hung, L.-W., Jain, S., McCoy, A.~J., Moriarty,
+  N.~W., Oeffner, R.~D., Poon, B.~K., Prisant, M.~G., Read, R.~J., Richardson,
+  J.~S., Richardson, D.~C., Sammito, M.~D., Sobolev, O.~V., Stockwell, D.~H.,
+  Terwilliger, T.~C., Urzhumtsev, A.~G., Videau, L.~L., Williams, C.~J.
+  \harvardand\ Adams, P.~D.  \harvardyearleft 2019\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Structural Biology},
+  \volbf{75}(10), 861--877.
+\newline\harvardurl{https://journals.iucr.org/d/issues/2019/10/00/di5033/}
+
+\harvarditem[Long \emph{et~al.}]{Long, Nicholls, Emsley, Gra{\v z}ulis, Merkys,
+  Vaitkus \harvardand\ Murshudov}{2017}{long_acedrg_2017}
+Long, F., Nicholls, R.~A., Emsley, P., Gra{\v z}ulis, S., Merkys, A., Vaitkus,
+  A. \harvardand\ Murshudov, G.~N.  \harvardyearleft 2017\harvardyearright{}.
+\newblock \emph{Acta Crystallographica. Section D, Structural Biology},
+  \volbf{73}(Pt 2), 112--122.
+
+\harvarditem[Lundgren \emph{et~al.}]{Lundgren, Caldararu, Oksanen \harvardand\
+  Ryde}{2024}{lundgren_quantum_2024}
+Lundgren, K. J.~M., Caldararu, O., Oksanen, E. \harvardand\ Ryde, U.
+  \harvardyearleft 2024\harvardyearright{}.
+\newblock \emph{IUCrJ}, \volbf{11}(6), 921--937.
+\newline\harvardurl{https://journals.iucr.org/m/issues/2024/06/00/jt5077/}
+
+\harvarditem[Maier \emph{et~al.}]{Maier, Martinez, Kasavajhala, Wickstrom,
+  Hauser \harvardand\ Simmerling}{2015}{maier_ff14sb_2015}
+Maier, J.~A., Martinez, C., Kasavajhala, K., Wickstrom, L., Hauser, K.~E.
+  \harvardand\ Simmerling, C.  \harvardyearleft 2015\harvardyearright{}.
+\newblock \emph{Journal of Chemical Theory and Computation}, \volbf{11}(8),
+  3696--3713.
+
+\harvarditem[McCoy \emph{et~al.}]{McCoy, Grosse-Kunstleve, Adams, Winn, Storoni
+  \harvardand\ Read}{2007}{mccoy_phaser_2007}
+McCoy, A.~J., Grosse-Kunstleve, R.~W., Adams, P.~D., Winn, M.~D., Storoni,
+  L.~C. \harvardand\ Read, R.~J.  \harvardyearleft 2007\harvardyearright{}.
+\newblock \emph{Journal of Applied Crystallography}, \volbf{40}(4), 658--674.
+\newline\harvardurl{//journals.iucr.org/paper?he5368}
+
+\harvarditem[Mikhailovskii \emph{et~al.}]{Mikhailovskii, Izmailov, Xue, Case
+  \harvardand\ Skrynnikov}{2024}{mikhailovskii_x-ray_2024}
+Mikhailovskii, O., Izmailov, S.~A., Xue, Y., Case, D.~A. \harvardand\
+  Skrynnikov, N.~R.  \harvardyearleft 2024\harvardyearright{}.
+\newblock \emph{Journal of Chemical Information and Modeling}, \volbf{64}(1),
+  18--25.
+\newline\harvardurl{https://doi.org/10.1021/acs.jcim.3c01531}
+
+\harvarditem[Moriarty \emph{et~al.}]{Moriarty, Janowski, Swails, Nguyen,
+  Richardson, Case \harvardand\ Adams}{2020}{moriarty_improved_2020}
+Moriarty, N.~W., Janowski, P.~A., Swails, J.~M., Nguyen, H., Richardson, J.~S.,
+  Case, D.~A. \harvardand\ Adams, P.~D.  \harvardyearleft
+  2020\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Structural Biology},
+  \volbf{76}(1), 51--62.
+\newline\harvardurl{https://journals.iucr.org/d/issues/2020/01/00/lp5044/}
+
+\harvarditem[Murshudov \emph{et~al.}]{Murshudov, Skub{\'a}k, Lebedev, Pannu,
+  Steiner, Nicholls, Winn, Long \harvardand\
+  Vagin}{2011}{murshudov_refmac5_2011}
+Murshudov, G.~N., Skub{\'a}k, P., Lebedev, A.~A., Pannu, N.~S., Steiner, R.~A.,
+  Nicholls, R.~A., Winn, M.~D., Long, F. \harvardand\ Vagin, A.~A.
+  \harvardyearleft 2011\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Biological Crystallography},
+  \volbf{67}(4), 355--367.
+\newline\harvardurl{//journals.iucr.org/paper?ba5152}
+
+\harvarditem[Murshudov \emph{et~al.}]{Murshudov, Vagin \harvardand\
+  Dodson}{1997}{murshudov_refinement_1997}
+Murshudov, G.~N., Vagin, A.~A. \harvardand\ Dodson, E.~J.  \harvardyearleft
+  1997\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Biological Crystallography},
+  \volbf{53}(3), 240--255.
+\newline\harvardurl{https://journals.iucr.org/d/issues/1997/03/00/li0235/}
+
+\harvarditem{Nannenga \harvardand\ Gonen}{2019}{nannenga_cryo-em_2019}
+Nannenga, B.~L. \harvardand\ Gonen, T.  \harvardyearleft
+  2019\harvardyearright{}.
+\newblock \emph{Nature Methods}, \volbf{16}(5), 369--379.
+\newline\harvardurl{https://www.nature.com/articles/s41592-019-0395-x}
+
+\harvarditem{Pannu \harvardand\ Read}{1996}{pannu_improved_1996}
+Pannu, N.~S. \harvardand\ Read, R.~J.  \harvardyearleft
+  1996\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section A: Foundations of
+  Crystallography}, \volbf{52}(5), 659--668.
+\newline\harvardurl{https://journals.iucr.org/a/issues/1996/05/00/li0224/}
+
+\harvarditem[Paszke \emph{et~al.}]{Paszke, Gross, Massa, Lerer, Bradbury,
+  Chanan, Killeen, Lin, Gimelshein, Antiga, Desmaison, K{\"o}pf, Yang, DeVito,
+  Raison, Tejani, Chilamkurthy, Steiner, Fang, Bai \harvardand\
+  Chintala}{2019}{paszke2019pytorchimperativestylehighperformance}
+Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G., Killeen,
+  T., Lin, Z., Gimelshein, N., Antiga, L., Desmaison, A., K{\"o}pf, A., Yang,
+  E., DeVito, Z., Raison, M., Tejani, A., Chilamkurthy, S., Steiner, B., Fang,
+  L., Bai, J. \harvardand\ Chintala, S.  \harvardyearleft
+  2019\harvardyearright{}.
+\newblock Pytorch: An imperative style, high-performance deep learning library.
+\newline\harvardurl{https://arxiv.org/abs/1912.01703}
+
+\harvarditem{Read}{1986}{read_improved_1986}
+Read, R.~J.  \harvardyearleft 1986\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section A: Foundations of
+  Crystallography}, \volbf{42}(3), 140--149.
+
+\harvarditem{Schlichting}{2015}{schlichting_serial_2015}
+Schlichting, I.  \harvardyearleft 2015\harvardyearright{}.
+\newblock \emph{IUCrJ}, \volbf{2}(2), 246--255.
+\newline\harvardurl{//journals.iucr.org/paper?it5004}
+
+\harvarditem[Schulz \emph{et~al.}]{Schulz, Yorke, Pearson \harvardand\
+  Mehrabi}{2022}{schulz_best_2022}
+Schulz, E.~C., Yorke, B.~A., Pearson, A.~R. \harvardand\ Mehrabi, P.
+  \harvardyearleft 2022\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Structural Biology},
+  \volbf{78}(1), 14--29.
+\newline\harvardurl{https://journals.iucr.org/d/issues/2022/01/00/qn5005/}
+
+\harvarditem[Tillet \emph{et~al.}]{Tillet, Kung \harvardand\
+  Cox}{2019}{tillet_triton_2019}
+Tillet, P., Kung, H.~T. \harvardand\ Cox, D.  \harvardyearleft
+  2019\harvardyearright{}.
+\newblock In \emph{Proceedings of the 3rd {ACM} {SIGPLAN} {International}
+  {Workshop} on {Machine} {Learning} and {Programming} {Languages}}, {MAPL}
+  2019, pp. 10--19. New York, NY, USA: Association for Computing Machinery.
+\newline\harvardurl{https://dl.acm.org/doi/10.1145/3315508.3329973}
+
+\harvarditem{Turk}{2013}{turk_main_2013}
+Turk, D.  \harvardyearleft 2013\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D: Biological Crystallography},
+  \volbf{69}(8), 1342--1357.
+\newline\harvardurl{//journals.iucr.org/paper?dz5277}
+
+\harvarditem[Wang \emph{et~al.}]{Wang, Wang, Kollman \harvardand\
+  Case}{2006}{wang_antechamber_2006}
+Wang, J., Wang, W., Kollman, P.~A. \harvardand\ Case, D.~A.  \harvardyearleft
+  2006\harvardyearright{}.
+\newblock \emph{Journal of Molecular Graphics and Modelling}, \volbf{25}(2),
+  247--260.
+
+\harvarditem[Wang \emph{et~al.}]{Wang, Wolf, Caldwell, Kollman \harvardand\
+  Case}{2004}{wang_gaff_2004}
+Wang, J., Wolf, R.~M., Caldwell, J.~W., Kollman, P.~A. \harvardand\ Case, D.~A.
+   \harvardyearleft 2004\harvardyearright{}.
+\newblock \emph{Journal of Computational Chemistry}, \volbf{25}(9), 1157--1174.
+
+\harvarditem[Wickstrand \emph{et~al.}]{Wickstrand, Katona, Nakane, Nogly,
+  Standfuss, Nango \harvardand\ Neutze}{2020}{wickstrand_tool_2020}
+Wickstrand, C., Katona, G., Nakane, T., Nogly, P., Standfuss, J., Nango, E.
+  \harvardand\ Neutze, R.  \harvardyearleft 2020\harvardyearright{}.
+\newblock \emph{Structural Dynamics}, \volbf{7}(2), 024701.
+\newline\harvardurl{https://doi.org/10.1063/1.5126921}
+
+\harvarditem{Wojdyr}{2022}{wojdyr_gemmi_2022}
+Wojdyr, M.  \harvardyearleft 2022\harvardyearright{}.
+\newblock \emph{Journal of Open Source Software}, \volbf{7}(73), 4200.
+\newline\harvardurl{https://joss.theoj.org/papers/10.21105/joss.04200}
+
+\harvarditem[Wranik \emph{et~al.}]{Wranik, Weinert, Slavov, Masini, Furrer,
+  Gaillard, Gioia, Ferrarotti, James, Glover, Carrillo, Kekilli, Stipp,
+  Skopintsev, Br{\"u}nle, M{\"u}hlethaler, Beale, Gashi, Nass, Ozerov, Johnson,
+  Cirelli, Bacellar, Braun, Wang, Dworkowski, Milne, Cavalli, Wachtveitl,
+  Steinmetz \harvardand\ Standfuss}{2023}{wranik_watching_2023}
+Wranik, M., Weinert, T., Slavov, C., Masini, T., Furrer, A., Gaillard, N.,
+  Gioia, D., Ferrarotti, M., James, D., Glover, H., Carrillo, M., Kekilli, D.,
+  Stipp, R., Skopintsev, P., Br{\"u}nle, S., M{\"u}hlethaler, T., Beale, J.,
+  Gashi, D., Nass, K., Ozerov, D., Johnson, P. J.~M., Cirelli, C., Bacellar,
+  C., Braun, M., Wang, M., Dworkowski, F., Milne, C., Cavalli, A., Wachtveitl,
+  J., Steinmetz, M.~O. \harvardand\ Standfuss, J.  \harvardyearleft
+  2023\harvardyearright{}.
+\newblock \emph{Nature Communications}, \volbf{14}(1), 903.
+\newline\harvardurl{https://www.nature.com/articles/s41467-023-36481-5}
+
+\harvarditem[Yamashita \emph{et~al.}]{Yamashita, Wojdyr, Long, Nicholls
+  \harvardand\ Murshudov}{2023}{yamashita_gemmi_2023}
+Yamashita, K., Wojdyr, M., Long, F., Nicholls, R.~A. \harvardand\ Murshudov,
+  G.~N.  \harvardyearleft 2023\harvardyearright{}.
+\newblock \emph{Acta Crystallographica Section D, Structural Biology},
+  \volbf{79}(5), 368--373.
+
+\harvarditem[Zubatyuk \emph{et~al.}]{Zubatyuk, Biczysko, Ranasinghe, Moriarty,
+  Gokcan, Kruse, Poon, Adams, Waller, Roitberg, Isayev \harvardand\
+  Afonine}{2025}{zubatyuk_aquaref_2025}
+Zubatyuk, R., Biczysko, M., Ranasinghe, K., Moriarty, N.~W., Gokcan, H., Kruse,
+  H., Poon, B.~K., Adams, P.~D., Waller, M.~P., Roitberg, A.~E., Isayev, O.
+  \harvardand\ Afonine, P.~V.  \harvardyearleft 2025\harvardyearright{}.
+\newblock \emph{Nature Communications}, \volbf{16}(1), 9224.
+\newline\harvardurl{https://www.nature.com/articles/s41467-025-64313-1}
+
+\end{thebibliography}

@@ -1,15 +1,75 @@
-# Paper Figures — TorchRef IUCrJ Publication
+# TorchRef paper — scripts, data and accepted manuscript
 
-This folder contains scripts, data, and figures for the TorchRef paper.
-All paths are relative — no hardcoded absolute paths.
+Companion repository for
 
-## Prerequisites
+> Seidel, H.-P., Standfuss, J. & Weinert, T. (2026). *TorchRef: An open-source PyTorch
+> Framework for Crystallographic Refinement.* Journal of Applied Crystallography,
+> accepted. <!-- TODO: volume, pages and DOI once published -->
+
+The software itself lives at <https://github.com/HatPdotS/TorchRef>; the paper describes
+**TorchRef v0.6.4**. This repository holds what turns data into the published figures:
+the benchmark and plotting scripts, the data that fit in git, per-panel source data, and
+the author accepted manuscript.
+
+| Path | Contents |
+|------|----------|
+| `manuscript/` | Author accepted manuscript: LaTeX source, figures, and PDFs of the main text and Supplementary Methods |
+| `source_data/` | The values each figure panel draws, one CSV per panel (see [`source_data/README.md`](source_data/README.md)) |
+| `figure2_alphafold_start/` | Figure 2: AlphaFold-start benchmark against REFMAC5 and phenix.refine |
+| `figure3_performance/` | Figure 3: structure-factor and refinement-cycle performance |
+| `figure4_difference_refinement/` | Figure 4: difference refinement of IBL isomerisation in tubulin, all inputs and outputs |
+| `extended_figures/` | Extended figures (ExtFig 1–5, described below) |
+
+## Versions
+
+The tag **`jac-accepted`** is the state the published figures were made from, and runs
+against TorchRef v0.6.4. Commits after it on `main` follow later TorchRef API changes
+and need a newer TorchRef.
+
+## Setting up
+
+The scripts were written to run as the `paper/` folder inside a TorchRef checkout, with
+the TorchRef environment at `.dev/`; the commands below and in the per-figure READMEs
+assume that layout.
 
 ```bash
-pip install torchref[dev]          # TorchRef with dev dependencies
+git clone --branch v0.6.4 https://github.com/HatPdotS/TorchRef.git
+cd TorchRef
+rm -rf paper    # TorchRef tags from before this split still carry an older copy
+git clone --branch jac-accepted https://github.com/HatPdotS/TorchRef-paper.git paper
+python -m venv .dev && .dev/bin/pip install -e ".[dev]"
+
 module load ccp4                    # REFMAC5 for validation
 module load phenix/phenix-1.20-4459 # PHENIX for comparison refinement
 ```
+
+## What is and is not in this repository
+
+Re-plotting every figure needs only this repository: `source_data/` holds the plotted values.
+Figure 3 (`figure3_performance/data/1DAW.*`) and Figure 4 carry their full inputs in-tree.
+
+Re-running the Figure 2 benchmark from scratch additionally needs data that is too large for
+git:
+
+- the ~1000 benchmark structures (`data/`), which are PDB entries; the structure set is
+  listed in `figure2_alphafold_start/manifest.json` and `mr_status.csv`;
+- the PHENIX comparison refinements (`phenix_refinements/`);
+- the placed AlphaFold starting models and run outputs (`figure2_alphafold_start/placed/`,
+  `runs/`). <!-- TODO: Zenodo DOI for these -->
+
+`data` and `phenix_refinements` are symlinks to where these live on the PSI cluster.
+
+## Licences
+
+- Code: MIT (`LICENSE`), as TorchRef.
+- Manuscript, figures and data: CC BY 4.0 (`LICENSE-CC-BY-4.0.md`). The manuscript is the
+  author accepted version, deposited under the IUCr green open-access policy; please cite the
+  published article.
+- Structures taken from the PDB (e.g. 1DAW, 7YYZ, 8QL2) remain under the PDB's own terms (CC0).
+
+---
+
+# Reproducing the figures
 
 ## Data Layout
 
