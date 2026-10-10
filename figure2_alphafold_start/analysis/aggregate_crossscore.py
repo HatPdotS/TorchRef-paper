@@ -15,7 +15,7 @@ and is therefore judged only by the two established programs.
 
 Usage
 -----
-    ./.dev/bin/python paper/figure2_alphafold_start/analysis/aggregate_crossscore.py
+    python figure2_alphafold_start/analysis/aggregate_crossscore.py
 """
 
 import json

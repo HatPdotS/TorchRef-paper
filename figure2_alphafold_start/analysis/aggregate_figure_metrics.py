@@ -24,7 +24,7 @@ Engines use the no-rigid-body protocol:
 
 Usage
 -----
-    ./.dev/bin/python paper/figure2_alphafold_start/analysis/aggregate_figure_metrics.py
+    python figure2_alphafold_start/analysis/aggregate_figure_metrics.py
 """
 
 import argparse

@@ -1,4 +1,6 @@
 #!/bin/bash
+# SLURM only. For a single machine use run_fig3a.sh instead.
+# Fetch the structures first: python figure3_performance/structures.py
 # Fig3a (fcalc) benchmark — one EXCLUSIVE node per structure.
 #
 # Why: this is a PERFORMANCE benchmark, so co-locating CPU-heavy jobs on a node
@@ -9,23 +11,31 @@
 # job. A dependent job aggregates every per-structure JSON into summary.csv and
 # renders the figure.
 #
-# CPU_MODEL pins every array task to one CPU model. Exclusivity alone is not
-# enough: `day` spans Xeon 6152/6230/6230R and EPYC 7453/9335, so without a
-# constraint each structure is timed on whatever generation SLURM had free. That
+# PAPER_SLURM_CONSTRAINT pins every array task to one CPU model. Exclusivity alone
+# is not enough on a heterogeneous cluster: without a constraint each structure is
+# timed on whatever CPU generation SLURM had free. That
 # makes the cross-structure trend part hardware and part code, and it makes two
 # runs of this script incomparable -- an unchanged cctbx reference moved by 2x
 # between the 2026-07-01 and 2026-08-04 runs for exactly this reason. Check
-# availability before changing it (>= one node per structure must be free):
-#   sinfo -h -o "%n %f %t" -p day | grep <model>
+# availability first (>= one node per structure must be free):
+#   sinfo -h -o "%n %f %t" | grep <model>
 set -euo pipefail
 
-REPO="/das/work/units/LBR-FEL/p17490/Peter/Library/work_trees_torchref/dev"
-BENCH="${REPO}/paper/figure3_performance/fcalc_benchmark"
-PY="${REPO}/.dev/bin/python"
+# Scheduler options come from the same variables as jobs.py. Unset means "cluster default".
+#   PAPER_SLURM_PARTITION      CPU partition (needs >= one free node per structure)
+#   PAPER_SLURM_GPU_PARTITION  partition for the single GPU job
+#   PAPER_SLURM_CONSTRAINT     CPU model feature; pin it so every structure is timed on
+#                              the same CPU generation, as the published run was
+CPU_OPTS=(); GPU_OPTS=(); AGG_OPTS=()
+[ -n "${PAPER_SLURM_PARTITION:-}" ] && CPU_OPTS+=(--partition="$PAPER_SLURM_PARTITION") && AGG_OPTS+=(--partition="$PAPER_SLURM_PARTITION")
+[ -n "${PAPER_SLURM_CONSTRAINT:-}" ] && CPU_OPTS+=(--constraint="$PAPER_SLURM_CONSTRAINT")
+[ -n "${PAPER_SLURM_GPU_PARTITION:-}" ] && GPU_OPTS+=(--partition="$PAPER_SLURM_GPU_PARTITION")
+
+BENCH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PY="${PAPER_PYTHON:-python}"
 TS="$(date +%Y%m%d_%H%M%S)"
-OUT="${REPO}/paper/figure3_performance/data/fcalc/results_${TS}"
+OUT="${BENCH}/../data/fcalc/results_${TS}"
 THREADS="1 2 4 8 16 32"
-CPU_MODEL="${CPU_MODEL:-cpu_epyc9335}"
 mkdir -p "${OUT}"
 cd "${BENCH}"
 
@@ -34,12 +44,12 @@ cd "${BENCH}"
 N=$(wc -l < "${OUT}/structures.txt"); ARR="0-$((N - 1))"
 echo "Structures (${N}): $(tr '\n' ' ' < "${OUT}/structures.txt")"
 echo "Output: ${OUT}"
-echo "CPU model: ${CPU_MODEL}"
-echo "${CPU_MODEL}" > "${OUT}/cpu_model.txt"
+echo "CPU model: ${PAPER_SLURM_CONSTRAINT:-unconstrained}"
+echo "${PAPER_SLURM_CONSTRAINT:-unconstrained}" > "${OUT}/cpu_model.txt"
 
 # --- CPU thread-scaling: one exclusive node per structure, all the same model ---
 CPU=$(sbatch --parsable --array="${ARR}" --job-name=fig3a_cpu \
-    --partition=day --exclusive --constraint="${CPU_MODEL}" --time=04:00:00 \
+    ${CPU_OPTS[@]+"${CPU_OPTS[@]}"} --exclusive --time=04:00:00 \
     --output="${BENCH}/fig3a_cpu_%A_%a.out" \
     --wrap "set -e; STRUCT=\$(sed -n \"\$((SLURM_ARRAY_TASK_ID+1))p\" ${OUT}/structures.txt); \
 echo \"node \$(hostname)  structure \${STRUCT}\"; \
@@ -48,9 +58,9 @@ cd ${BENCH} && ${PY} benchmark_thread_scaling.py --structures \${STRUCT} --no_gp
 --output_dir ${OUT} --timeout 1800")
 echo "CPU array: ${CPU} [${ARR}] (exclusive nodes)"
 
-# --- GPU point: all structures, one A100 job ---
+# --- GPU point: all structures, one GPU job ---
 GPU=$(sbatch --parsable --job-name=fig3a_gpu \
-    --partition=gpu --gres=gpu:nvidia_a100-pcie-40gb:1 --cpus-per-task=8 --mem=32G \
+    ${GPU_OPTS[@]+"${GPU_OPTS[@]}"} --gres=gpu:1 --cpus-per-task=8 --mem=32G \
     --time=02:00:00 --output="${BENCH}/fig3a_gpu_%j.out" \
     --wrap "cd ${BENCH} && ${PY} benchmark_thread_scaling.py --gpu_only \
 --n_iterations 10 --n_warmup 3 --no_summary --output_dir ${OUT} --timeout 1800")
@@ -61,7 +71,7 @@ echo "GPU job: ${GPU}"
 # SFcalculator-GPU data from SF_calc_comparison, so the figure is NOT rendered
 # here. After this run and the SF run both finish, render it with:
 #   plot_figure3a.py --fcalc-dir ${OUT} --sf-dir <SF results dir>
-PLOT=$(sbatch --parsable --job-name=fig3a_agg --partition=hour --time=00:20:00 \
+PLOT=$(sbatch --parsable --job-name=fig3a_agg ${AGG_OPTS[@]+"${AGG_OPTS[@]}"} --time=00:20:00 \
     --mem=8G --dependency="afterany:${CPU}:${GPU}" \
     --output="${BENCH}/fig3a_agg_%j.out" \
     --wrap "cd ${BENCH} && ${PY} benchmark_thread_scaling.py --aggregate --output_dir ${OUT}")

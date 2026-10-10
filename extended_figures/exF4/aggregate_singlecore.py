@@ -14,7 +14,7 @@ Output columns: program,code,wall_s.
 
 Usage
 -----
-    ./.dev/bin/python paper/extended_figures/exF4/aggregate_singlecore.py
+    python extended_figures/exF4/aggregate_singlecore.py
 """
 from __future__ import annotations
 

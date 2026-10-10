@@ -14,26 +14,26 @@ rows for ExtFig 3 because it guessed the wrong pivot columns).
 So: re-render a figure and its CSVs update.
 
 ```bash
-cd paper/figure2_alphafold_start
-../../.dev/bin/python plot_figure_af.py                                  # Figure 2
-../../.dev/bin/python plot_figure_af.py --prefix mode \
+cd figure2_alphafold_start
+python plot_figure_af.py                                  # Figure 2
+python plot_figure_af.py --prefix mode \
     -o ../extended_figures/exF5/output/extended_figure5.png \
     --engines ml_noalpha=ml_noalpha:#2166ac ml=ml:#b2182b \
               ml_full=ml_full:#762a83 nll_beta=nll_beta:#e08214         # ExtFig 5
 
 cd ../figure3_performance
-../../.dev/bin/python plot_figure3a.py --fcalc-dir data/fcalc/results_<TS> \
+python plot_figure3a.py --fcalc-dir data/fcalc/results_<TS> \
                                       --sf-dir SF_calc_comparison/results_<TS>
-../../.dev/bin/python plot_figure3b.py --results-dir data/refinement_cycle/results_<TS>
+python plot_figure3b.py --results-dir data/refinement_cycle/results_<TS>
 
 cd ../extended_figures
-(cd exF1 && ../../../.dev/bin/python plot_exF1.py)
-(cd exF2 && ../../../.dev/bin/python plot_exF2.py)
-(cd exF3 && ../../../.dev/bin/python plot_exF3.py)
-(cd exF4 && ../../../.dev/bin/python plot_singlecore.py)
+(cd exF1 && python plot_exF1.py)
+(cd exF2 && python plot_exF2.py)
+(cd exF3 && python plot_exF3.py)
+(cd exF4 && python plot_singlecore.py)
 ```
 
-The shared writer is `paper/figure_source_data.py`. It refuses to write a 0-row file (a
+The shared writer is `figure_source_data.py` at the repository root. It refuses to write a 0-row file (a
 0-row source-data CSV looks like a successful export of an empty panel).
 
 ## Files
@@ -60,7 +60,7 @@ The shared writer is `paper/figure_source_data.py`. It refuses to write a 0-row 
   signed-rank symmetry and weights by magnitude, so a near-zero median can still carry a
   small p (see `phenix` / `r_work`). Neither alone is the whole story.
   Written by `figure2_alphafold_start/analysis/summarize_medians.py`, which also puts the
-  same numbers in `paper/FIGURE_MEDIANS.md`.
+  same numbers in `FIGURE_MEDIANS.md`.
 - Panel B holds the `q25`/`median`/`q75` the strips draw, in **RMSZ units** (rms/sigma), not
   the 0–1 axis fraction the panel maps them onto.
 - Panel C is in **minutes**; `box_position` gives the measured left-to-right speed order.

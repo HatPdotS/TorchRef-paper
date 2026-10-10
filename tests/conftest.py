@@ -25,7 +25,7 @@ def pytest_sessionstart(session):
 
 @pytest.fixture(scope="session")
 def paper_root() -> Path:
-    """The repository root, which is also the ``paper/`` folder of a TorchRef checkout."""
+    """The repository root."""
     return ROOT
 
 

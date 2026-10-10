@@ -7,7 +7,7 @@ for R-factors and geometry RMS/sigma, and report per-structure:
 Writes runs/metrics/weight_grid.csv and prints per-cell coverage.
 
 Usage:
-    ./.dev/bin/python analysis/aggregate_weight_grid.py
+    python analysis/aggregate_weight_grid.py
 """
 import argparse
 import csv

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Re-run the canonical AF-start TorchRef arm with THIS (dev) build, in-tree.
+"""Run the canonical AF-start TorchRef arm with the installed TorchRef.
 
 Reproduces the canonical default arm exactly: ``-n 10 --mode separate
 --xray-mode ml`` with NO ``--weights`` override, so the group weights stay at the
@@ -11,10 +11,10 @@ target-mode comparison arms (ExtFig 5). Always pair it with a distinct ``--arm``
 the skip logic keys on ``validate.log``, so two modes under one arm name would
 silently leave whichever ran first in place.
 
-Because this lives under the dev worktree, ``run_af_pipeline``'s ``PYTHON`` /
-``REFINE_SCRIPT`` already point at the dev build — no override needed.
+``PYTHON`` / ``REFINE_SCRIPT`` come from ``jobs.py``: the current interpreter and the
+TorchRef it has installed.
 
-Each SLURM job does refine + REFMAC 0-cycle validation in one shot so the
+Each job does refine + REFMAC 0-cycle validation in one shot so the
 ``validate.log`` (the apples-to-apples R-factor) lands next to ``refined.pdb``.
 
 Baseline (review build, REFMAC-0-cycle validated; see baseline/fig_rfactors.csv):
@@ -24,9 +24,9 @@ Baseline (review build, REFMAC-0-cycle validated; see baseline/fig_rfactors.csv)
 
 Usage
 -----
-    ./.dev/bin/python analysis/submit_local_arm.py --dry-run --limit 1
-    ./.dev/bin/python analysis/submit_local_arm.py --limit 1   # one real job
-    ./.dev/bin/python analysis/submit_local_arm.py            # all solved
+    python analysis/submit_local_arm.py --dry-run --limit 1
+    python analysis/submit_local_arm.py --limit 1   # one real job
+    python analysis/submit_local_arm.py            # all solved
 """
 
 from __future__ import annotations
@@ -41,8 +41,7 @@ import run_af_pipeline as P  # noqa: E402
 
 
 def build_script(arm, code, pdb, mtz, outdir, n_cycles, mem, weights=None,
-                 xray_mode="ml", partition="hour", time="01:00:00",
-                 constraint=P.CPU_MODEL):
+                 xray_mode="ml", time="01:00:00"):
     # Group weights default to DEFAULT_GROUP_WEIGHTS (xray=1 / geom=0.2 /
     # adp=0.02) — no flag needed. Pass an explicit {xray, geometry, adp} dict
     # to override and record the exact weights in the job script (merged onto
@@ -51,16 +50,9 @@ def build_script(arm, code, pdb, mtz, outdir, n_cycles, mem, weights=None,
         "" if not weights
         else f" \\\n    --weights '{json.dumps(weights)}'"
     )
-    return f"""#!/bin/bash
-#SBATCH --job-name=af_{arm}_{code}
-#SBATCH --partition={partition}
-#SBATCH --constraint={constraint}
-#SBATCH --cpus-per-task=4
-#SBATCH --time={time}
-#SBATCH --mem={mem}
-#SBATCH --output={outdir / 'out.log'}
-#SBATCH --error={outdir / 'error.log'}
-
+    return P.jobs.header(f"af_{arm}_{code}", out=outdir / "out.log",
+                         err=outdir / "error.log", cpus=4, mem=mem,
+                         time=time) + f"""
 set -e
 export TORCHREF_NUM_THREADS=4
 
@@ -68,12 +60,13 @@ export TORCHREF_NUM_THREADS=4
     -m {pdb} -sf {mtz} -o {outdir} \\
     -n {n_cycles} \\
     --mode separate \\
-    --xray-mode {xray_mode}{weights_line}
+    --xray-mode {xray_mode} \\
+    --device cpu{weights_line}
 
 # REFMAC 0-cycle validation on the refined model (apples-to-apples R-factors)
-source {P.CCP4_SETUP}
-TEMP_DIR=/tmp/validate_{arm}_{code}_${{SLURM_JOB_ID}}
-mkdir -p $TEMP_DIR && cd $TEMP_DIR
+{P.CCP4_SETUP}
+TEMP_DIR=$(mktemp -d)
+cd $TEMP_DIR
 export CCP4_SCR=$TEMP_DIR
 cp {outdir / 'refined.pdb'} input.pdb
 cp {mtz} input.mtz
@@ -97,8 +90,8 @@ def main():
                     help="Body target (--xray-mode passed to refine.py). Default 'ml', "
                          "the canonical arm. Use a distinct --arm for anything else so "
                          "the modes land in separate directories; 'ml_full' additionally "
-                         "needs --partition day --time 04:00:00 --mem 16G (~4x the "
-                         "per-gradient cost of the 32-node quadrature).")
+                         "needs --time 04:00:00 --mem 16G (~4x the per-gradient cost "
+                         "of the 32-node quadrature).")
     ap.add_argument("--n-cycles", type=int, default=10)
     ap.add_argument("--xray-weight", type=float, default=None,
                     help="Override the xray group weight (default 1).")
@@ -113,18 +106,11 @@ def main():
                          "Use a distinct --arm (e.g. *_norama) so the run lands "
                          "in its own directory for the with/without comparison.")
     ap.add_argument("--mem", default="8G",
-                    help="SLURM --mem per job (8G is the benchmark default, "
+                    help="Memory requested per job (8G is the benchmark default, "
                          "matching the exF4 single-core allocation; the largest "
                          "structures OOM at 8G and are reported as failures).")
-    ap.add_argument("--partition", default="hour",
-                    help="SLURM partition (default hour; use day for ml_full).")
     ap.add_argument("--time", default="01:00:00",
-                    help="SLURM --time per job (default 01:00:00).")
-    ap.add_argument("--constraint", default=P.CPU_MODEL,
-                    help="SLURM --constraint (default run_af_pipeline.CPU_MODEL). "
-                         "Every arm whose runtime is plotted must share one CPU "
-                         "model, or engine identity is confounded with hardware "
-                         "generation.")
+                    help="Walltime requested per job under SLURM (default 01:00:00).")
     ap.add_argument("--codes", nargs="+", default=None)
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--dry-run", action="store_true")
@@ -152,11 +138,10 @@ def main():
         weights["geometry/ramachandran"] = 0.0
     weights = weights or None
     wdesc = "DEFAULT_GROUP_WEIGHTS (1/0.2/0.02)" if weights is None else json.dumps(weights)
-    print(f"Arm: {args.arm}  build=DEV(in-tree)  n_cycles={args.n_cycles}  "
+    print(f"Arm: {args.arm}  n_cycles={args.n_cycles}  "
           f"xray-mode={args.xray_mode}  weights={wdesc}")
-    print(f"SLURM: partition={args.partition} time={args.time} mem={args.mem} "
-          f"constraint={args.constraint}")
-    print(f"Python: {P.PYTHON}")
+    print(f"Resources: time={args.time} mem={args.mem}")
+    print(P.jobs.describe())
     print(f"Output: {arm_dir}\n{len(codes)} solved structures\n")
 
     submitted = skipped = missing = 0
@@ -173,11 +158,9 @@ def main():
             outdir.mkdir(parents=True, exist_ok=True)
         script = build_script(args.arm, code, pdb, mtz, outdir, args.n_cycles,
                               args.mem, weights=weights,
-                              xray_mode=args.xray_mode,
-                              partition=args.partition, time=args.time,
-                              constraint=args.constraint)
+                              xray_mode=args.xray_mode, time=args.time)
         if args.dry_run and submitted == 0:
-            print("── example sbatch script ──")
+            print("── example job script ──")
             print(script)
             print("───────────────────────────")
         if P._sbatch(script, tmp / f"ref_{code}.sh", args.dry_run) or args.dry_run:

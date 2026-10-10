@@ -12,10 +12,11 @@ is part of the measurement:
   changed moved by -43% and +31% against the previous sweep, with per-structure
   IQRs spanning ~2x. Emitting a structure's three arms adjacently puts them under
   near-identical conditions.
-* **One CPU model.** `hour`/`day` span Xeon 6152/6230/6230R and EPYC 7453/9335,
-  and EPYC 9335 is 2.2-2.7x faster than 7453 on identical code. Without a
-  constraint each engine draws a different hardware mix, which is a systematic
-  per-engine bias rather than noise that n=767 averages away.
+* **One CPU model.** On a heterogeneous cluster one CPU generation can be 2-3x
+  faster than another on identical code. Without a constraint each engine draws a
+  different hardware mix, which is a systematic per-engine bias rather than noise
+  that n=767 averages away. The published runs pinned every cell to one model; set
+  ``PAPER_SLURM_CONSTRAINT`` (see ``jobs.py``) to do the same.
 
 Both properties are what `extended_figures/exF4/submit_singlecore.py` already
 does for the 1-core re-timing; this makes the 4-core figure match.
@@ -31,9 +32,9 @@ final PDB, which ``run_af_pipeline.py validate`` scores afterwards).
 
 Usage
 -----
-    ./.dev/bin/python analysis/submit_fig2_arms.py --dry-run --limit 1
-    ./.dev/bin/python analysis/submit_fig2_arms.py --limit 2      # smoke test
-    ./.dev/bin/python analysis/submit_fig2_arms.py                # all solved
+    python analysis/submit_fig2_arms.py --dry-run --limit 1
+    python analysis/submit_fig2_arms.py --limit 2      # smoke test
+    python analysis/submit_fig2_arms.py                # all solved
 """
 from __future__ import annotations
 
@@ -51,15 +52,14 @@ ENGINES = ["torchref", "refmac", "phenix"]
 ARM_DIR = {"torchref": "torchref", "refmac": "refmac", "phenix": "phenix_norb"}
 
 
-def _cell(engine, code, pdb, mtz, outdir, n_cycles, constraint, mem):
+def _cell(engine, code, pdb, mtz, outdir, n_cycles, mem):
     """(script_text, script_path) for one (engine, code) cell."""
     if engine == "torchref":
         return (submit_local_arm.build_script(
-                    "torchref", code, pdb, mtz, outdir, n_cycles, mem,
-                    constraint=constraint),
+                    "torchref", code, pdb, mtz, outdir, n_cycles, mem),
                 outdir.parent / "tmp_scripts" / f"ref_{code}.sh")
     build = P.script_refmac if engine == "refmac" else P.script_phenix
-    return (build(code, pdb, mtz, outdir, cycles=n_cycles, constraint=constraint),
+    return (build(code, pdb, mtz, outdir, cycles=n_cycles),
             outdir.parent / "tmp_scripts" / f"{engine}_{code}.sh")
 
 
@@ -83,11 +83,8 @@ def main():
     ap.add_argument("--n-cycles", type=int, default=10,
                     help="Macro cycles for every engine (default 10, the "
                          "canonical benchmark count that exF4 re-times).")
-    ap.add_argument("--constraint", default=P.CPU_MODEL,
-                    help=f"SLURM --constraint for every cell (default "
-                         f"{P.CPU_MODEL}).")
     ap.add_argument("--torchref-mem", default="8G",
-                    help="SLURM --mem for the TorchRef cells (8G is the "
+                    help="Memory requested for the TorchRef cells (8G is the "
                          "benchmark default; the largest structures OOM there "
                          "and are reported as failures).")
     ap.add_argument("--codes", nargs="+", default=None)
@@ -101,10 +98,9 @@ def main():
     if args.limit:
         codes = codes[:args.limit]
 
-    print(f"Figure-2 arms: {', '.join(args.engines)}   build=DEV(in-tree)")
-    print(f"n_cycles={args.n_cycles}  constraint={args.constraint}  "
-          f"order=STRUCTURE-major")
-    print(f"Python: {P.PYTHON}")
+    print(f"Figure-2 arms: {', '.join(args.engines)}")
+    print(f"n_cycles={args.n_cycles}  order=STRUCTURE-major")
+    print(P.jobs.describe())
     print(f"{len(codes)} solved structures x {len(args.engines)} arms = "
           f"{len(codes) * len(args.engines)} cells\n")
 
@@ -126,9 +122,9 @@ def main():
             if not args.dry_run:
                 outdir.mkdir(parents=True, exist_ok=True)
             script, path = _cell(engine, code, pdb, mtz, outdir, args.n_cycles,
-                                 args.constraint, args.torchref_mem)
+                                 args.torchref_mem)
             if args.dry_run and not shown:
-                print(f"── example sbatch script ({engine}) ──")
+                print(f"── example job script ({engine}) ──")
                 print(script)
                 print("──────────────────────────────────────")
                 shown = True

@@ -21,6 +21,10 @@ import time
 import warnings
 from pathlib import Path
 
+# The benchmark structures (fetched by ../structures.py).
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import structures  # noqa: E402
+
 # Verify TORCHREF_NUM_THREADS is set before any imports
 n_threads = int(os.environ.get("TORCHREF_NUM_THREADS", 1))
 
@@ -28,34 +32,11 @@ import torch
 from torchref.refinement import LBFGSRefinement
 
 
-def _find_repo_root() -> Path:
-    """Walk up from this file to find the repo root (marker: pyproject.toml).
-
-    See benchmark_thread_scaling.py for rationale — `__file__` can be
-    relative or staged under sbatch, so we anchor on a stable marker.
-    """
-    env_root = os.environ.get("TORCHREF_REPO_ROOT")
-    if env_root:
-        return Path(env_root).resolve()
-    p = Path(os.path.abspath(__file__)).parent
-    for ancestor in [p, *p.parents]:
-        if (ancestor / "pyproject.toml").is_file():
-            return ancestor
-    raise RuntimeError(
-        "Could not locate repo root (no pyproject.toml found walking up "
-        f"from {p}). Set TORCHREF_REPO_ROOT explicitly."
-    )
 
 
 def _resolve_files(structure: str) -> tuple[str, str]:
-    """Resolve (pdb, mtz) paths for a structure from the test-data suite."""
-    files_dir = _find_repo_root() / "tests" / "files"
-    pdb = files_dir / "pdb" / f"{structure}.pdb"
-    mtz = files_dir / "mtz" / f"{structure}.mtz"
-    for path in (pdb, mtz):
-        if not path.exists():
-            raise FileNotFoundError(path)
-    return str(pdb), str(mtz)
+    """Resolve (pdb, mtz) paths for a benchmark structure."""
+    return structures.resolve_files(structure)
 
 
 def _time_iterations(func, n_iterations: int) -> list[float]:
@@ -281,7 +262,7 @@ def main():
     )
     parser.add_argument(
         "--structure", type=str, default="1DAW",
-        help="Structure to benchmark; resolved from tests/files/{pdb,mtz}/ "
+        help="Structure to benchmark; resolved from figure3_performance/data/structures/{pdb,mtz}/ "
              "(default: 1DAW)",
     )
     parser.add_argument("--output", type=str, required=True, help="Output JSON file")

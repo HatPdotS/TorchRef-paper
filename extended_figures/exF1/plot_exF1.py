@@ -15,7 +15,7 @@ Data: figure2_alphafold_start/runs/metrics/weight_grid.csv
       (produced by analysis/submit_weight_grid.py + aggregate_weight_grid.py).
 
 Usage:
-    ./.dev/bin/python paper/extended_figures/exF1/plot_exF1.py
+    python extended_figures/exF1/plot_exF1.py
 """
 import csv
 import sys

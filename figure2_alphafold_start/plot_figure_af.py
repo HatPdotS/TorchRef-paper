@@ -12,8 +12,8 @@ Reads the four CSVs produced by analysis/aggregate_figure_metrics.py
 
 Usage
 -----
-    ./.dev/bin/python paper/figure2_alphafold_start/plot_figure_af.py
-    ./.dev/bin/python paper/figure2_alphafold_start/plot_figure_af.py -o fig.png --dpi 600
+    python figure2_alphafold_start/plot_figure_af.py
+    python figure2_alphafold_start/plot_figure_af.py -o fig.png --dpi 600
 """
 
 import argparse

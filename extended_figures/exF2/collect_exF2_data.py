@@ -16,7 +16,7 @@ Source: figure2_alphafold_start/runs/metrics/fig_crossscore.csv
 Output: data/exF2_rfactor_by_resolution.csv
 
 Usage:
-    ./.dev/bin/python paper/extended_figures/exF2/collect_exF2_data.py
+    python extended_figures/exF2/collect_exF2_data.py
 """
 import sys
 from pathlib import Path

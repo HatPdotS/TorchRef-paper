@@ -27,3 +27,8 @@ manuscript/*.synctex.gz
 manuscript/*.blg
 manuscript/torchref.pdf
 manuscript/supplementary.pdf
+figure3_performance/data/structures/
+
+# Benchmark inputs supplied by the user (see README "Data for Figure 2"); not tracked.
+/data
+/phenix_refinements

@@ -13,7 +13,7 @@ are where TorchRef beats the reference program.
 Reads data/exF2_rfactor_by_resolution.csv (collect_exF2_data.py).
 
 Usage:
-    ./.dev/bin/python paper/extended_figures/exF2/plot_exF2.py
+    python extended_figures/exF2/plot_exF2.py
 """
 import sys
 from pathlib import Path

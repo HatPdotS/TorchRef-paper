@@ -6,7 +6,7 @@ from the aggregated CSVs (so the numbers in the text always match the plots) and
 writes paper/FIGURE_MEDIANS.md.
 
 Usage:
-    ./.dev/bin/python paper/figure2_alphafold_start/analysis/summarize_medians.py
+    python figure2_alphafold_start/analysis/summarize_medians.py
 """
 import argparse
 import json

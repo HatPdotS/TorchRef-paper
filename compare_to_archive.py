@@ -19,13 +19,13 @@ eyeball -- and because a half-split estimate of it is unreliable at these n.
 Usage
 -----
     # ExtFig 1 locked cell, current build vs the archive
-    ./.dev/bin/python paper/compare_to_archive.py \\
+    python compare_to_archive.py \\
         --old paper/archive/figures_pre_mlrework/metrics/weight_grid.csv \\
         --new paper/figure2_alphafold_start/runs/metrics/weight_grid.csv \\
         --filter gi=7 --filter ai=4 --metric r_work --metric r_free
 
     # Figure 2 R-factors, one engine
-    ./.dev/bin/python paper/compare_to_archive.py \\
+    python compare_to_archive.py \\
         --old paper/archive/figures_pre_mlrework/metrics/fig_rfactors.csv \\
         --new paper/figure2_alphafold_start/runs/metrics/fig_rfactors.csv \\
         --filter engine=torchref --metric r_work --metric r_free

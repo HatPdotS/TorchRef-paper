@@ -5,12 +5,13 @@
 # placed/{code}_af.pdb. Idempotent: exits early if already placed.
 #
 # Usage: run_mr_one.sh CODE
+# PHENIX must be on PATH, or set PHENIX_ENV to a phenix_env.sh to source. The published
+# placements used PHENIX 1.21.1-5286. Python is PAPER_PYTHON (default: python on PATH).
 # NB: no `set -u` — phenix's env scripts reference unbound vars.
 set -o pipefail
 
-REPO=/das/work/p17/p17490/Peter/Library/work_trees_torchref/review
-AFDIR="$REPO/paper/figure2_alphafold_start"
-PHENIX_ENV=/opt/psi/MX/phenix/1.21.1-5286/phenix-1.21.1-5286/phenix_env.sh
+AFDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PY="${PAPER_PYTHON:-python}"
 
 code="${1:?usage: run_mr_one.sh CODE}"
 placed="$AFDIR/placed/$code"_af.pdb
@@ -22,12 +23,10 @@ if [ -f "$placed" ]; then
 fi
 
 echo "[$code] preparing search model(s)..."
-"$REPO/.dev/bin/python" "$AFDIR/prepare_search_model.py" "$code" || {
+"$PY" "$AFDIR/prepare_search_model.py" "$code" || {
     echo "[$code] PREP FAILED"; exit 1; }
 
-# Phenix tools (source directly; the cluster modulefile is incompatible with the
-# local Environment Modules, so we bypass `module load`).
-source "$PHENIX_ENV"
+if [ -n "${PHENIX_ENV:-}" ]; then source "$PHENIX_ENV"; fi
 
 cd "$wd"
 echo "[$code] process_predicted_model (pLDDT->B)..."

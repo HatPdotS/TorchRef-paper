@@ -5,8 +5,7 @@ CPU Thread Scaling + GPU Benchmark for TorchRef vs cctbx Structure Factor Calcul
 Measures how Fcalc performance scales with the number of CPU threads for both
 TorchRef and cctbx, and optionally benchmarks GPU performance.
 
-Designed to run with:
-    srun -c 16 --gres=gpu:1 python benchmark_thread_scaling.py
+Normally launched by run_fig3a.sh (one machine) or submit_fig3a_nodes.sh (SLURM).
 
 Usage:
     python benchmark_thread_scaling.py
@@ -27,33 +26,21 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+# The benchmark structures (fetched by ../structures.py).
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import structures  # noqa: E402
+
 SCRIPT_DIR = Path(__file__).parent.resolve()
 WORKER_SCRIPT = SCRIPT_DIR / "benchmark_worker.py"
 PLOT_SCRIPT = SCRIPT_DIR.parent / "plot_figure3a.py"
 PYTHON = sys.executable
 
 
-def _find_repo_root() -> Path:
-    """Locate the repo root (marker: pyproject.toml); honor TORCHREF_REPO_ROOT."""
-    env_root = os.environ.get("TORCHREF_REPO_ROOT")
-    if env_root:
-        return Path(env_root).resolve()
-    for ancestor in [SCRIPT_DIR, *SCRIPT_DIR.parents]:
-        if (ancestor / "pyproject.toml").is_file():
-            return ancestor
-    raise RuntimeError("Could not locate repo root (no pyproject.toml found).")
 
 
 def discover_structures() -> list[str]:
-    """All test structures with a matching tests/files/{pdb,mtz}/{ID} pair.
-
-    Mirrors tests/conftest.py::all_structure_pairs — intersection of PDB and
-    MTZ stems. Naturally excludes 1AK5 (pdb is 1AK5_with_H) and 7L84 (no mtz).
-    """
-    files_dir = _find_repo_root() / "tests" / "files"
-    pdb_ids = {p.stem for p in (files_dir / "pdb").glob("*.pdb")}
-    mtz_ids = {p.stem for p in (files_dir / "mtz").glob("*.mtz")}
-    return sorted(pdb_ids & mtz_ids)
+    """The fetched benchmark structures (see ``figure3_performance/structures.py``)."""
+    return structures.discover_structures()
 
 
 def _clear_stale_extension_locks():
@@ -318,7 +305,7 @@ def main():
         type=str,
         nargs="+",
         default=None,
-        help="Structures to benchmark (resolved from tests/files/{pdb,mtz}/). "
+        help="Structures to benchmark (resolved from figure3_performance/data/structures/{pdb,mtz}/). "
              "Default: all matching test-data pairs.",
     )
     parser.add_argument(

@@ -41,8 +41,8 @@ parser rejects is invisible until someone types it.
 
 Usage
 -----
-    ./.dev/bin/python paper/check_submitter_flags.py           # exit 1 on any failure
-    ./.dev/bin/python paper/check_submitter_flags.py -v        # show every command checked
+    python check_submitter_flags.py           # exit 1 on any failure
+    python check_submitter_flags.py -v        # show every command checked
 """
 
 from __future__ import annotations
@@ -51,13 +51,10 @@ import argparse
 import ast
 import re
 import shlex
-import sys
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent          # paper/
-REPO = HERE.parent
-
-sys.path.insert(0, str(REPO))
+HERE = Path(__file__).resolve().parent          # repository root
+REPO = HERE
 
 #: One row per submitter: the token naming the runner inside the sbatch body, and which parser
 #: validates the flags. ``runner`` is a regex, and it is what makes detection unambiguous --
@@ -69,11 +66,11 @@ sys.path.insert(0, str(REPO))
 #:   ``("ast", "<rel path>")``   -> option strings from that file's add_argument calls
 #: ``extra`` lists flags the runner consumes itself before delegating.
 SUBMITTERS = [
-    ("paper/figure2_alphafold_start/run_af_pipeline.py", r"\{REFINE_SCRIPT\}", ("refine", None), ()),
-    ("paper/figure2_alphafold_start/analysis/submit_local_arm.py", r"\{P\.REFINE_SCRIPT\}", ("refine", None), ()),
-    ("paper/figure2_alphafold_start/analysis/submit_weight_grid.py", r"\{P\.REFINE_SCRIPT\}", ("refine", None), ()),
-    ("paper/figure2_alphafold_start/analysis/submit_seeded_benchmark.py", r"\{P\.REFINE_SCRIPT\}", ("refine", None), ()),
-    ("paper/extended_figures/exF4/submit_singlecore.py", r"\{P\.REFINE_SCRIPT\}", ("refine", None), ()),
+    ("figure2_alphafold_start/run_af_pipeline.py", r"\{REFINE_SCRIPT\}", ("refine", None), ()),
+    ("figure2_alphafold_start/analysis/submit_local_arm.py", r"\{P\.REFINE_SCRIPT\}", ("refine", None), ()),
+    ("figure2_alphafold_start/analysis/submit_weight_grid.py", r"\{P\.REFINE_SCRIPT\}", ("refine", None), ()),
+    ("figure2_alphafold_start/analysis/submit_seeded_benchmark.py", r"\{P\.REFINE_SCRIPT\}", ("refine", None), ()),
+    ("extended_figures/exF4/submit_singlecore.py", r"\{P\.REFINE_SCRIPT\}", ("refine", None), ()),
 ]
 
 #: A command line **begins** with the interpreter. Anchoring there is what separates the sbatch

@@ -12,8 +12,8 @@ only for contrast: it is not the paired statistic and can differ in sign.
 
 Usage
 -----
-    ./.dev/bin/python paper/extended_figures/exF1/compare_fine_grid.py
-    ./.dev/bin/python paper/extended_figures/exF1/compare_fine_grid.py --tag ""   # coarse grid
+    python extended_figures/exF1/compare_fine_grid.py
+    python extended_figures/exF1/compare_fine_grid.py --tag ""   # coarse grid
 """
 from __future__ import annotations
 

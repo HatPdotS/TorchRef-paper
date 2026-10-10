@@ -19,27 +19,24 @@ data set, so a positive result would be about the structures actually being refi
 
 Usage
 -----
-    ./.dev/bin/python paper/probe_scale_collapse.py --codes 1ETE 1FSI 1DAW
+    python probe_scale_collapse.py --codes 1ETE 1FSI 1DAW
 """
 
 from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
 
 import torch
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parent
-sys.path.insert(0, str(REPO))
 
 PLACED = HERE / "figure2_alphafold_start" / "placed"
 DATA = HERE / "data"
 
 # Imported rather than hardcoded: the arms are whatever the library currently offers, so a
 # renamed or added objective cannot leave this probe quietly testing one target twice.
-from torchref.scaling.scaler_base import (  # noqa: E402 - needs the sys.path insert above
+from torchref.scaling.scaler_base import (
     DEFAULT_SCALE_TARGET,
     SCALE_TARGETS,
 )

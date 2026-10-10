@@ -21,7 +21,7 @@ TorchRef here is the canonical arm (torchref; xray 1 / geometry 0.2
 
 Usage
 -----
-    ./.dev/bin/python paper/extended_figures/exF3/plot_exF3.py
+    python extended_figures/exF3/plot_exF3.py
 """
 
 import argparse

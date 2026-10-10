@@ -12,7 +12,7 @@ already holds an ``r_free`` are skipped.
 
 Usage
 -----
-    ./.dev/bin/python paper/figure2_alphafold_start/analysis/build_torchref_score_worklist.py
+    python figure2_alphafold_start/analysis/build_torchref_score_worklist.py
 
     # ExtFig 5 target-mode arms, scored alongside the four Figure-2 engines
     ... build_torchref_score_worklist.py --arm ml_noalpha=mode_ml_noalpha \\
@@ -138,8 +138,11 @@ def main():
           + ("  [--force]" if args.force else ""))
     print(f"worklist: {WORKLIST}")
     if lines:
-        print(f"submit:  sbatch --array=1-{len(lines)}%60 "
-              f"{BASE}/analysis/torchref_score_array.sh")
+        sh = BASE / "analysis" / "torchref_score_array.sh"
+        n = len(lines)
+        print(f"run locally:  for i in $(seq 1 {n}); do bash {sh} {WORKLIST} $i; done")
+        print(f"or on SLURM:  sbatch --array=1-{n}%96 -o {XDIR}/slurm_tr/%A_%a.out "
+              f"{sh} {WORKLIST}")
 
 
 if __name__ == "__main__":

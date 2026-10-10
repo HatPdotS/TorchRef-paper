@@ -5,7 +5,7 @@ CSV is written from the *same* arrays the panel draws. That is the point: a sepa
 that re-derived the panel values would be a second implementation to keep in step, and would
 silently disagree the moment a panel's filtering changed.
 
-CSVs land in ``paper/source_data/`` and are named ``<figure>_<panel>_<what>.csv``.
+CSVs land in ``source_data/`` and are named ``<figure>_<panel>_<what>.csv``.
 
 Typical use, at the end of a panel function::
 
@@ -26,7 +26,7 @@ _WRITTEN: list[str] = []
 
 
 def outdir() -> Path:
-    """``paper/source_data/``, located by walking up from this file."""
+    """``source_data/`` at the repository root, next to this file."""
     d = Path(__file__).resolve().parent / "source_data"
     d.mkdir(parents=True, exist_ok=True)
     return d
@@ -64,7 +64,7 @@ def rounded(x, nd: int = 6):
 
 
 def dump(name: str, rows, cols: list[str] | None = None, nd: int = 6) -> Path | None:
-    """Write ``rows`` (list of dicts) to ``paper/source_data/<name>.csv``.
+    """Write ``rows`` (list of dicts) to ``source_data/<name>.csv``.
 
     ``cols`` defaults to the first row's keys, so column order follows insertion order.
     Float values are passed through :func:`rounded`. An empty ``rows`` writes nothing and

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Submit the 3-arm seeded-optimizer benchmark over a fixed 100-structure subset.
 
-For each code in ``subset_100.txt`` this submits three SLURM jobs, each running
+For each code in ``subset_100.txt`` this submits one job per arm, each running
 refinement (from the Phaser-placed AF start model) + a REFMAC 0-cycle validation
 in one shot so the apples-to-apples R-factors land in ``validate.log``:
 
@@ -14,9 +14,9 @@ diagonal-Hessian seed; `sep→seeded` compares the new approach to the shipped d
 
 Usage
 -----
-    ./.dev/bin/python analysis/submit_seeded_benchmark.py --dry-run --limit 1
-    ./.dev/bin/python analysis/submit_seeded_benchmark.py --limit 1      # one real triple
-    ./.dev/bin/python analysis/submit_seeded_benchmark.py               # all 100 x 3
+    python analysis/submit_seeded_benchmark.py --dry-run --limit 1
+    python analysis/submit_seeded_benchmark.py --limit 1      # one real triple
+    python analysis/submit_seeded_benchmark.py               # all 100 x 3
 """
 
 from __future__ import annotations
@@ -41,27 +41,22 @@ ARMS = {
 
 
 def build_script(arm, code, pdb, mtz, outdir, n_cycles, mem, refine_flags):
-    return f"""#!/bin/bash
-#SBATCH --job-name=sb_{arm}_{code}
-#SBATCH --partition=day
-#SBATCH --cpus-per-task=4
-#SBATCH --time=04:00:00
-#SBATCH --mem={mem}
-#SBATCH --output={outdir / 'out.log'}
-#SBATCH --error={outdir / 'error.log'}
-
+    return P.jobs.header(f"sb_{arm}_{code}", out=outdir / "out.log",
+                         err=outdir / "error.log", cpus=4, mem=mem,
+                         time="04:00:00") + f"""
 set -e
 export TORCHREF_NUM_THREADS=4
 
 {P.PYTHON} -u {P.REFINE_SCRIPT} \\
     -m {pdb} -sf {mtz} -o {outdir} \\
     -n {n_cycles} \\
-    {refine_flags}
+    {refine_flags} \\
+    --device cpu
 
 # REFMAC 0-cycle validation on the refined model (apples-to-apples R-factors)
-source {P.CCP4_SETUP}
-TEMP_DIR=/tmp/validate_{arm}_{code}_${{SLURM_JOB_ID}}
-mkdir -p $TEMP_DIR && cd $TEMP_DIR
+{P.CCP4_SETUP}
+TEMP_DIR=$(mktemp -d)
+cd $TEMP_DIR
 export CCP4_SCR=$TEMP_DIR
 cp {outdir / 'refined.pdb'} input.pdb
 cp {mtz} input.mtz
@@ -82,7 +77,7 @@ def main():
     ap.add_argument("--codes-file", default=str(HERE / "subset_100.txt"))
     ap.add_argument("--n-cycles", type=int, default=10)
     ap.add_argument("--mem", default="16G",
-                    help="SLURM --mem per job (16G recovers the large structures "
+                    help="Memory requested per job (16G recovers the large structures "
                          "that OOM at the 8G canonical default).")
     ap.add_argument("--arms", nargs="+", default=list(ARMS),
                     choices=list(ARMS))
@@ -104,7 +99,7 @@ def main():
 
     print(f"Subset: {len(codes)} codes x {len(args.arms)} arms  n_cycles={args.n_cycles}"
           f"  mem={args.mem}")
-    print(f"Python: {P.PYTHON}\nArms: {args.arms}\n")
+    print(f"{P.jobs.describe()}\nArms: {args.arms}\n")
 
     submitted = skipped = missing = 0
     for code in codes:
@@ -122,7 +117,7 @@ def main():
             script = build_script(arm, code, pdb, mtz, outdir, args.n_cycles,
                                   args.mem, ARMS[arm])
             if args.dry_run and submitted == 0:
-                print(f"── example sbatch script ({arm}) ──")
+                print(f"── example job script ({arm}) ──")
                 print(script)
                 print("───────────────────────────")
             tmp = P.RUNS / arm / "tmp_scripts"

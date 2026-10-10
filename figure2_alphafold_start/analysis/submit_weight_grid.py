@@ -14,17 +14,17 @@ the exact (geometry, adp) per arm is written to
 
 Usage
 -----
-    ./.dev/bin/python analysis/submit_weight_grid.py --dry-run
-    ./.dev/bin/python analysis/submit_weight_grid.py            # submit
+    python analysis/submit_weight_grid.py --dry-run
+    python analysis/submit_weight_grid.py            # submit
 
 Stage it rather than firing all 5000 tasks blind: run the locked default cell on its own,
 check it against the previous grid's numbers for the same cell, and release the rest only if
 they agree. Indices and arm names are unaffected by ``--only-cells``, so both halves
 aggregate together.
 
-    ./.dev/bin/python analysis/submit_weight_grid.py --array --only-cells 7,4
+    python analysis/submit_weight_grid.py --array --only-cells 7,4
     # ... compare, then:
-    ./.dev/bin/python analysis/submit_weight_grid.py --array
+    python analysis/submit_weight_grid.py --array
 
 NB ``--dry-run`` still (re)writes the manifest -- pre-existing behaviour, and the reason a
 dry run with a *different* ``--n-geom``/``--n-adp`` would overwrite the real grid's manifest.
@@ -47,15 +47,9 @@ MANIFEST = P.RUNS / "metrics" / "wgrid_manifest.csv"
 
 def build_script(arm, code, pdb, mtz, outdir, n_cycles, mem, weights):
     wjson = json.dumps(weights)
-    return f"""#!/bin/bash
-#SBATCH --job-name=af_{arm}_{code}
-#SBATCH --partition=hour
-#SBATCH --cpus-per-task=4
-#SBATCH --time=01:00:00
-#SBATCH --mem={mem}
-#SBATCH --output={outdir / 'out.log'}
-#SBATCH --error={outdir / 'error.log'}
-
+    return P.jobs.header(f"af_{arm}_{code}", out=outdir / "out.log",
+                         err=outdir / "error.log", cpus=4, mem=mem,
+                         time="01:00:00") + f"""
 set -e
 export TORCHREF_NUM_THREADS=4
 
@@ -64,12 +58,13 @@ export TORCHREF_NUM_THREADS=4
     -n {n_cycles} \\
     --mode separate \\
     --xray-mode ml \\
+    --device cpu \\
     --weights '{wjson}'
 
 # REFMAC 0-cycle validation (validate.log -> R-factors + geometry RMS/sigma)
-source {P.CCP4_SETUP}
-TEMP_DIR=/tmp/validate_{arm}_{code}_${{SLURM_JOB_ID}}
-mkdir -p $TEMP_DIR && cd $TEMP_DIR
+{P.CCP4_SETUP}
+TEMP_DIR=$(mktemp -d)
+cd $TEMP_DIR
 export CCP4_SCR=$TEMP_DIR
 cp {outdir / 'refined.pdb'} input.pdb
 cp {mtz} input.mtz
@@ -84,22 +79,19 @@ cd / && rm -rf $TEMP_DIR
 
 
 def build_array_script(name, tasks_file, n_tasks, logdir, n_cycles, mem, throttle):
-    """One SLURM job array: task i reads line i of the (tab-separated) tasks file
-    `outdir<TAB>pdb<TAB>mtz<TAB>weights_json` and runs refine + REFMAC validation."""
-    return f"""#!/bin/bash
-#SBATCH --job-name={name}
-#SBATCH --partition=hour
-#SBATCH --cpus-per-task=4
-#SBATCH --time=01:00:00
-#SBATCH --mem={mem}
-#SBATCH --array=0-{n_tasks - 1}%{throttle}
-#SBATCH --output={logdir}/task_%a.out
-#SBATCH --error={logdir}/task_%a.err
+    """One job array: task i reads line i of the (tab-separated) tasks file
+    `outdir<TAB>pdb<TAB>mtz<TAB>weights_json` and runs refine + REFMAC validation.
 
+    Under SLURM ``throttle`` caps concurrently running tasks; the local runner runs
+    them one at a time anyway."""
+    head = P.jobs.header(name, out=f"{logdir}/task_%a.out", err=f"{logdir}/task_%a.err",
+                         cpus=4, mem=mem, time="01:00:00", array=(0, n_tasks - 1))
+    head = head.replace(f"--array=0-{n_tasks - 1}", f"--array=0-{n_tasks - 1}%{throttle}")
+    return head + f"""
 set -e
 export TORCHREF_NUM_THREADS=4
 
-LINE=$(sed -n "$((SLURM_ARRAY_TASK_ID + 1))p" "{tasks_file}")
+LINE=$(sed -n "$((TASK_ID + 1))p" "{tasks_file}")
 OUTDIR=$(printf '%s' "$LINE" | cut -f1)
 PDB=$(printf '%s' "$LINE" | cut -f2)
 MTZ=$(printf '%s' "$LINE" | cut -f3)
@@ -111,12 +103,13 @@ mkdir -p "$OUTDIR"
     -n {n_cycles} \\
     --mode separate \\
     --xray-mode ml \\
+    --device cpu \\
     --weights "$WEIGHTS"
 
 # REFMAC 0-cycle validation (validate.log -> R-factors + geometry RMS/sigma)
-source {P.CCP4_SETUP}
-TEMP_DIR=/tmp/validate_{name}_${{SLURM_ARRAY_JOB_ID}}_${{SLURM_ARRAY_TASK_ID}}
-mkdir -p $TEMP_DIR && cd $TEMP_DIR
+{P.CCP4_SETUP}
+TEMP_DIR=$(mktemp -d)
+cd $TEMP_DIR
 export CCP4_SCR=$TEMP_DIR
 cp "$OUTDIR/refined.pdb" input.pdb
 cp "$MTZ" input.mtz
@@ -165,12 +158,12 @@ def main():
                          "history. An out-of-range index is an error, not an empty "
                          "submission.")
     ap.add_argument("--array", action="store_true",
-                    help="Submit the whole grid as ONE SLURM job array instead "
-                         "of one job per (cell, structure). Much lighter on the "
-                         "scheduler.")
+                    help="Submit the whole grid as ONE job array instead of one "
+                         "job per (cell, structure). Much lighter on a SLURM "
+                         "scheduler; runs the same tasks in turn locally.")
     ap.add_argument("--array-throttle", type=int, default=200,
-                    help="Max concurrently-running array tasks (sbatch %%N). "
-                         "At 4 cpus/task, 200 ~ 800 cpus (per-user cap ~1167).")
+                    help="Max concurrently-running array tasks under SLURM "
+                         "(sbatch %%N). At 4 cpus/task, 200 ~ 800 cpus.")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
@@ -282,12 +275,16 @@ def main():
             for outdir, pdb, mtz, wjson in tasks:
                 f.write(f"{outdir}\t{pdb}\t{mtz}\t{wjson}\n")
         array_script.write_text(script)
-        jid = P._sbatch(script, array_script, dry_run=False)
-        print(f"submitted array job {jid}: {len(tasks)} tasks "
-              f"(throttle %{args.array_throttle})")
+        jid = P.jobs.submit(script, array_script, array=(0, len(tasks) - 1))
+        if P.jobs.SCHEDULER == "slurm":
+            print(f"submitted array job {jid}: {len(tasks)} tasks "
+                  f"(throttle %{args.array_throttle})")
+        else:
+            print(f"ran {len(tasks)} tasks locally: "
+                  f"{'all succeeded' if jid else 'some failed, see above'}")
         return
 
-    # Per-job fallback (one sbatch per task).
+    # Per-job fallback (one job per task).
     first = 0
     for outdir, pdb, mtz, wjson in tasks:
         outdir_p = Path(outdir)
@@ -298,7 +295,7 @@ def main():
         script = build_script(arm, code, pdb, mtz, outdir_p, args.n_cycles,
                               args.mem, json.loads(wjson))
         if args.dry_run and first == 0:
-            print("── example sbatch script ──")
+            print("── example job script ──")
             print(script)
             print("───────────────────────────")
         first += 1

@@ -22,56 +22,85 @@ the author accepted manuscript.
 
 ## Versions
 
-This repository is pinned to **TorchRef v0.6.4**, the version the paper describes
-(`requirements.txt`). `main` keeps the scripts in their v0.6.4 form and takes only fixes;
-the tag **`jac-accepted`** is the exact state the published figures were made from.
-
-TorchRef's API has moved on since v0.6.4. Versions of the scripts that follow TorchRef's
-`main` live on the **`torchref-main`** branch and are not guaranteed to reproduce the
-published numbers.
+The scripts target **TorchRef v0.6.4**, the version the paper describes, installed from
+PyPI (`requirements.txt`). The tag **`jac-accepted`** is the exact state the published
+figures were made from; `main` adds only fixes that keep the scripts running on v0.6.4
+outside the cluster they were written on. The scripts are not updated for later TorchRef
+releases.
 
 Until TorchRef v0.7.0 these files lived in the `paper/` folder of the TorchRef repository;
 from v0.7.0 on, this repository is their only home.
 
 ## Setting up
 
-The scripts were written to run as the `paper/` folder inside a TorchRef checkout, with
-the TorchRef environment at `.dev/`; the commands below and in the per-figure READMEs
-assume that layout.
-
 ```bash
-git clone --branch v0.6.4 https://github.com/HatPdotS/TorchRef.git
-cd TorchRef
-rm -rf paper    # TorchRef tags from before this split still carry an older copy
-git clone https://github.com/HatPdotS/TorchRef-paper.git paper
-python -m venv .dev && .dev/bin/pip install -e ".[dev]"   # installs TorchRef v0.6.4 from the checkout
-
-module load ccp4                    # REFMAC5 for validation
-module load phenix/phenix-1.20-4459 # PHENIX for comparison refinement
+git clone https://github.com/HatPdotS/TorchRef-paper.git
+cd TorchRef-paper
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt          # TorchRef 0.6.4 from PyPI
+python -m pytest tests                    # smoke tests, a few seconds
 ```
 
-Without a TorchRef checkout, `pip install -r requirements.txt` installs the pinned
-TorchRef v0.6.4 from PyPI instead; the scripts then run from this repository's root.
+Run every script from this environment. The tests refuse to run against any TorchRef other
+than 0.6.4, so a mismatched environment fails loudly rather than producing different numbers.
 
-`tests/` holds smoke tests of the scripts' helper functions against the installed TorchRef
-(`python -m pytest tests`). They refuse to run against any TorchRef other than the pinned
-version, so a mismatched environment fails loudly rather than producing different numbers.
+Re-plotting needs nothing else. Re-running the benchmarks also needs:
 
-## What is and is not in this repository
+- **CCP4** (REFMAC5) for Figure 2's validation and REFMAC arm. The published runs used
+  CCP4 8.0 (REFMAC library 8.0.003).
+- **PHENIX** for Figure 2's phenix.refine arm, the cross-scoring and molecular replacement.
+  The published runs used PHENIX 1.21.1-5286.
+- **cctbx** for Figure 3a's reference timings, importable from the same Python as TorchRef:
+  `pip install cctbx-base`. PHENIX's bundled copy lives in PHENIX's own Python and does
+  not count.
+
+Put `refmac5` and `phenix.*` on `PATH`, or point `CCP4_SETUP` / `PHENIX_ENV` at the setup
+script to source (e.g. `ccp4.setup-sh`, `phenix_env.sh`).
+
+## Running the benchmarks
+
+Every submitter writes one self-contained bash script per job and runs it through
+[`jobs.py`](jobs.py), configured by environment variables:
+
+| Variable | Default | Meaning |
+|----------|---------|---------|
+| `PAPER_SCHEDULER` | `local` | `local` runs the jobs one after another on this machine; `slurm` submits them with `sbatch` |
+| `PAPER_SLURM_PARTITION` | unset | `#SBATCH --partition`; unset uses the cluster default |
+| `PAPER_SLURM_CONSTRAINT` | unset | `#SBATCH --constraint`, e.g. a CPU-model feature |
+| `PAPER_SLURM_GPU_PARTITION` | unset | Partition for the Figure 3 GPU job (`submit_fig3*_nodes.sh`) |
+| `PAPER_SLURM_EXTRA` | unset | More `#SBATCH` options, `;`-separated (e.g. `--account=x;--qos=y`) |
+| `PAPER_PYTHON` | current interpreter | Python the jobs run TorchRef with |
+| `CCP4_SETUP`, `PHENIX_ENV` | unset | Scripts to `source` before REFMAC5 / PHENIX |
+
+Every submitter takes `--dry-run`, which prints an example job script without running
+anything. Start there, then `--limit 1`.
+
+TorchRef jobs pass `--device cpu`. The published runs were CPU-only, and without it
+TorchRef would pick up a local CUDA or Apple GPU and change what the runtime panels measure.
+
+The full Figure 2 sweep is thousands of refinements and is only practical on a cluster.
+Its wall-clock panel (2c) and ExtFig 4 compare engines against each other, so the published
+runs pinned every job to one CPU model and interleaved the engines structure by structure.
+With SLURM, set `PAPER_SLURM_CONSTRAINT` to a CPU feature your cluster offers to get the
+same control. Locally, jobs run one at a time on one machine, which gives the same
+property by construction.
+
+## Data for Figure 2
 
 Re-plotting every figure needs only this repository: `source_data/` holds the plotted values.
-Figure 3 (`figure3_performance/data/1DAW.*`) and Figure 4 carry their full inputs in-tree.
+Figure 3 fetches its ten structures with `python figure3_performance/structures.py`
+(byte-identical to TorchRef v0.6.4's test files, checksum-verified). Figure 4 carries its
+full inputs in-tree.
 
-Re-running the Figure 2 benchmark from scratch additionally needs data that is too large for
-git:
+Re-running the Figure 2 benchmark from scratch additionally needs data that is too large
+for git. Provide it yourself:
 
-- the ~1000 benchmark structures (`data/`), which are PDB entries; the structure set is
-  listed in `figure2_alphafold_start/manifest.json` and `mr_status.csv`;
-- the PHENIX comparison refinements (`phenix_refinements/`);
-- the placed AlphaFold starting models and run outputs (`figure2_alphafold_start/placed/`,
-  `runs/`). <!-- TODO: Zenodo DOI for these -->
-
-`data` and `phenix_refinements` are symlinks to where these live on the PSI cluster.
+- `data/{CODE}/{CODE}.mtz` and `{CODE}.pdb` at the repository root, one folder per
+  benchmark structure (PDB entries; a directory or a symlink). The structure set is listed
+  in `figure2_alphafold_start/manifest.json` and `mr_status.csv`.
+- The placed AlphaFold starting models in `figure2_alphafold_start/placed/{CODE}_af.pdb`,
+  or regenerate them with the molecular-replacement pipeline described below.
+  <!-- TODO: Zenodo DOI for the placed models and run outputs -->
 
 ## Licences
 
@@ -85,17 +114,7 @@ git:
 
 # Reproducing the figures
 
-## Data Layout
-
-The `paper/` directory expects two data sources linked as:
-
-```
-paper/
-├── data -> ../scientific_testing/data            # ~1000 benchmark structures
-│   └── {CODE}/{CODE}.mtz, {CODE}.pdb, ...        # reflections + deposited model
-├── phenix_refinements -> .../refinements         # PHENIX comparison results
-│   └── {CODE}/{CODE}_refined_001.pdb, .log, ...
-```
+## Figure 2 inputs
 
 Figure 2 refines **Phaser-placed AlphaFold models**, not the deposited or perturbed
 coordinates: its starting models are `figure2_alphafold_start/placed/{CODE}_af.pdb`, and the
@@ -131,8 +150,13 @@ submitting one engine at a time confounds engine identity with cluster-load wind
 - **Panel A**: Structure factor (Fcalc) thread scaling and GPU performance vs cctbx.
 - **Panel B**: Full refinement cycle profiling with per-target breakdown.
 
-Benchmark scripts in `fcalc_benchmark/` and `refinement_cycle_benchmark/`.
-Test data: `data/1DAW.pdb` and `data/1DAW.mtz` (included in-tree).
+Benchmark scripts in `fcalc_benchmark/` and `refinement_cycle_benchmark/`. Fetch the ten
+benchmark structures once with `python figure3_performance/structures.py`, then run
+`run_fig3a.sh` / `run_fig3b.sh` on one machine, or `submit_fig3a_nodes.sh` /
+`submit_fig3b_nodes.sh` to give every structure its own exclusive SLURM node as the
+published timings did. `data/1DAW.pdb` and `data/1DAW.mtz` (in-tree) serve the
+single-structure scripts. Panel A's SFcalculator comparison points come from
+`source_data/`; the scripts that produced them are not part of this repository.
 
 ### Figure 4: Difference Refinement
 **Location:** `figure4_difference_refinement/`
@@ -162,29 +186,29 @@ directly comparable — same scorer (`phenix.model_vs_data`), same conserved-set
 The `ml` cell **is** Figure 2's `torchref` arm; only the other three are extra runs.
 
 ```bash
-cd paper/figure2_alphafold_start
+cd figure2_alphafold_start
 for m in ml_noalpha nll_beta; do
-    ../../.dev/bin/python analysis/submit_local_arm.py --arm mode_$m --xray-mode $m
+    python analysis/submit_local_arm.py --arm mode_$m --xray-mode $m
 done
 # ml_full costs ~4x per gradient (32-node quadrature)
-../../.dev/bin/python analysis/submit_local_arm.py --arm mode_ml_full --xray-mode ml_full \
-    --partition day --time 04:00:00 --mem 16G
+python analysis/submit_local_arm.py --arm mode_ml_full --xray-mode ml_full \
+    --time 04:00:00 --mem 16G
 
 # PHENIX-score the new arms (resume-safe; only the missing tasks are emitted)
-../../.dev/bin/python analysis/build_crossscore_worklist.py \
+python analysis/build_crossscore_worklist.py \
     --arm ml_noalpha=mode_ml_noalpha --arm ml_full=mode_ml_full --arm nll_beta=mode_nll_beta
-sbatch --array=1-N%60 analysis/crossscore_array.sh
+# build_crossscore_worklist.py prints the command that runs the worklist, locally or on SLURM
 
-../../.dev/bin/python analysis/aggregate_figure_metrics.py --prefix mode \
+python analysis/aggregate_figure_metrics.py --prefix mode \
     --arm ml=torchref:torchref --arm ml_noalpha=mode_ml_noalpha:torchref \
     --arm ml_full=mode_ml_full:torchref --arm nll_beta=mode_nll_beta:torchref
 
-../../.dev/bin/python plot_figure_af.py --prefix mode \
+python plot_figure_af.py --prefix mode \
     -o ../extended_figures/exF5/output/extended_figure5.png \
     --engines ml_noalpha=ml_noalpha:#2166ac ml=ml:#b2182b \
               ml_full=ml_full:#762a83 nll_beta=nll_beta:#e08214
 ```
 
-Before submitting anything, `../../.dev/bin/python check_submitter_flags.py` asserts every
+Before submitting anything, `python check_submitter_flags.py` asserts every
 submitter still emits flags `refine.py` accepts — a removed or renamed flag otherwise kills
 several thousand jobs at argparse, one at a time.

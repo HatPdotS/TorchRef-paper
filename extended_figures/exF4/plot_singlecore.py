@@ -10,8 +10,8 @@ Reads data/exF4_singlecore.csv (from aggregate_singlecore.py).
 
 Usage
 -----
-    ./.dev/bin/python paper/extended_figures/exF4/plot_singlecore.py
-    ./.dev/bin/python paper/extended_figures/exF4/plot_singlecore.py --dpi 600
+    python extended_figures/exF4/plot_singlecore.py
+    python extended_figures/exF4/plot_singlecore.py --dpi 600
 """
 import argparse
 import sys

@@ -6,22 +6,22 @@ every program pinned to a SINGLE CPU core, over the full conserved AlphaFold-sta
 (``codes_conserved.txt``, n=715). The main Figure-2 benchmark ran all three programs at
 4 cores; this re-levels them onto a clean per-core single-threaded comparison.
 
-For every (program, code) cell, write+sbatch a self-contained job that refines the
+For every (program, code) cell, write and submit a self-contained job that refines the
 Phaser-placed AlphaFold model for 10 macro cycles with the program pinned to 1 thread,
 and records the wall-clock runtime to ``timing.txt`` via a uniform shell timer
-(``date +%s.%N`` around the program call) so all three engines are measured identically.
+(a clock read around the program call) so all three engines are measured identically.
 Per-cell output lands in ``runs/{program}/{code}/n1/``.
 
 Reuses figure2_alphafold_start paths/helpers via ``run_af_pipeline`` (PLACED, _mtz,
-PYTHON, REFINE_SCRIPT, CCP4_SETUP, _sbatch). Submits ALL cells fresh (no resume-skip):
+PYTHON, REFINE_SCRIPT, CCP4_SETUP, _sbatch); scheduler settings are in ``jobs.py``. Submits ALL cells fresh (no resume-skip):
 an existing ``timing.txt`` is overwritten so the whole set is timed under identical
 conditions. Memory is 8G to match the main Figure-2 benchmark allocation.
 
 Usage
 -----
-    ./.dev/bin/python paper/extended_figures/exF4/submit_singlecore.py --dry-run --limit 1
-    ./.dev/bin/python paper/extended_figures/exF4/submit_singlecore.py --programs torchref
-    ./.dev/bin/python paper/extended_figures/exF4/submit_singlecore.py            # all 2145 cells
+    python extended_figures/exF4/submit_singlecore.py --dry-run --limit 1
+    python extended_figures/exF4/submit_singlecore.py --programs torchref
+    python extended_figures/exF4/submit_singlecore.py            # all 2145 cells
 """
 from __future__ import annotations
 
@@ -41,23 +41,19 @@ NCORES = 1                  # single core: the whole point of this figure
 LABEL = "n1"
 MEM = "8G"                  # match the main Figure-2 benchmark allocation
 
-# Per-program SLURM partition + walltime. Generous so a 1-core run never times out
-# (the timing IS the measurement). The unbounded n=715 set may contain structures larger
-# than the exF4 size cap; aggregate_singlecore.py reports any rc!=0 / not-run cell so a
-# straggler can be resubmitted to `week` if a giant structure overruns.
-PARTITION = {"torchref": "day", "phenix": "day", "refmac": "hour"}
+# Per-program walltime under SLURM. Generous so a 1-core run never times out (the timing
+# IS the measurement). The unbounded n=715 set may contain structures larger than the exF4
+# size cap; aggregate_singlecore.py reports any rc!=0 / not-run cell so a straggler can be
+# resubmitted with a longer walltime if a giant structure overruns.
 WALLTIME = {"torchref": "24:00:00", "phenix": "24:00:00", "refmac": "01:00:00"}
 
 # One CPU model for all three programs, because this figure compares wall-clock ACROSS
-# programs. EPYC 9335 is 2.2-2.7x faster than EPYC 7453 on identical code, and the
-# partitions above are not the same node pool by default -- refmac on `hour` would draw a
-# different hardware mix than torchref on `day`, which is a systematic per-engine bias, not
-# noise that n=715 averages away. The same 29 epyc9335 nodes belong to hour/day/week, so
-# constraining does not change which partition each program uses. Single-core jobs cannot be
-# --exclusive at this scale, so co-tenancy noise remains -- but it now falls on all three
-# engines from the same pool. Verify before changing:
-#   sinfo -h -p day -o "%n %f" | grep -c <model>
-CPU_MODEL = "cpu_epyc9335"
+# programs. On a heterogeneous cluster one CPU generation can be 2-3x faster than another
+# on identical code, so unpinned jobs give each engine a different hardware mix -- a
+# systematic per-engine bias, not noise that n=715 averages away. The published run pinned
+# every cell to one CPU model; set PAPER_SLURM_CONSTRAINT (jobs.py) to do the same.
+# Single-core jobs cannot be --exclusive at this scale, so co-tenancy noise remains -- but
+# it falls on all three engines from the same pool.
 
 
 def cell_dir(program, code):
@@ -65,24 +61,22 @@ def cell_dir(program, code):
 
 
 def _header(program, code, outdir):
-    return f"""#!/bin/bash
-#SBATCH --job-name=exF4sc_{program}_{code}
-#SBATCH --partition={PARTITION[program]}
-#SBATCH --constraint={CPU_MODEL}
-#SBATCH --cpus-per-task={NCORES}
-#SBATCH --time={WALLTIME[program]}
-#SBATCH --mem={MEM}
-#SBATCH --output={outdir / 'out.log'}
-#SBATCH --error={outdir / 'out.log'}
-"""
+    return P.jobs.header(f"exF4sc_{program}_{code}", out=outdir / "out.log",
+                         cpus=NCORES, mem=MEM, time=WALLTIME[program])
 
 
 # Uniform timer: wraps the program call (a plain command, NOT a pipe, so $? is the
 # program's own exit code) and writes "wall_s <float>\nrc <int>" to timing.txt. No
 # `set -e`: sourcing the phenix / ccp4 env can return nonzero internally, and the rc field
 # lets aggregation drop failed runs rather than record a bogus time.
+#
+# The clock is read through Python rather than ``date +%s.%N``: BSD/macOS ``date`` has no
+# %N and would silently record whole seconds.
+_NOW = f"$({P.PYTHON} -c 'import time; print(time.time())')"
+
+
 def _timed(body):
-    return (f"T0=$(date +%s.%N)\n{body}\nRC=$?\nT1=$(date +%s.%N)\n"
+    return (f"T0={_NOW}\n{body}\nRC=$?\nT1={_NOW}\n"
             f'awk "BEGIN{{printf \\"wall_s %.3f\\nrc %d\\n\\", $T1-$T0, $RC}}"'
             f' > "$OUTDIR/timing.txt"\n')
 
@@ -99,7 +93,7 @@ export TORCHREF_NUM_THREADS={NCORES}
 
 def script_phenix(code, pdb, mtz, outdir):
     # AF models are protein-only -> no elbow/ligand restraints needed. Plain refine in a
-    # private TMPDIR; phenix stdout flows to the SLURM out.log (no tee, so the timed $? is
+    # private TMPDIR; phenix stdout flows to the job's out.log (no tee, so the timed $? is
     # phenix's). CRYST1 "None" is sed-fixed (mirrors phenix_refine.sh) so phenix never
     # chokes on the Z field.
     #
@@ -124,8 +118,8 @@ def script_phenix(code, pdb, mtz, outdir):
             f"    write_def_file=false write_eff_file=false write_geo_file=false")
     return _header("phenix", code, outdir) + f"""
 OUTDIR={outdir}
-source {P.PHENIX_ENV}
-WORK=$(mktemp -d /tmp/exF4sc_phenix_{code}_XXXX)
+{P.PHENIX_SETUP}
+WORK=$(mktemp -d)
 cd "$WORK"
 if grep -q "^CRYST1.*None" {pdb}; then
     sed 's/\\(CRYST1.*P [0-9]* *[0-9]* *[0-9]* *\\)None/\\1   12/' {pdb} > "$WORK/input.pdb"
@@ -142,9 +136,9 @@ def script_refmac(code, pdb, mtz, outdir):
             "NCYCLES 10\nMAKE HYDR NO\nEND\nEOF")
     return _header("refmac", code, outdir) + f"""
 OUTDIR={outdir}
-source {P.CCP4_SETUP}
+{P.CCP4_SETUP}
 export OMP_NUM_THREADS={NCORES}
-WORK=$(mktemp -d /tmp/exF4sc_refmac_{code}_XXXX)
+WORK=$(mktemp -d)
 export CCP4_SCR=$WORK
 cd "$WORK"
 cp {pdb} input.pdb
@@ -178,7 +172,8 @@ def main():
 
     n_cells = len(args.programs) * len(codes)
     print(f"programs={args.programs}  cores={NCORES}  mem={MEM}  structures={len(codes)}")
-    print(f"cells = {n_cells}  (all submitted fresh, existing timings overwritten)\n")
+    print(f"cells = {n_cells}  (all submitted fresh, existing timings overwritten)")
+    print(P.jobs.describe() + "\n")
 
     submitted = missing = 0
     first = True
@@ -201,7 +196,7 @@ def main():
                 outdir.mkdir(parents=True, exist_ok=True)
             script = BUILDERS[program](code, pdb, mtz, outdir)
             if first and args.dry_run:
-                print(f"── example sbatch ({program}, {code}, {LABEL}) ──")
+                print(f"── example job script ({program}, {code}, {LABEL}) ──")
                 print(script)
                 print("──────────────────────────────────────────────")
                 first = False

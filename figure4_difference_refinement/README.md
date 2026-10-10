@@ -119,10 +119,9 @@ TorchRef refined (marine).
 | 23 | `panels/figure4_panel_23.png` | TorchRef + extrapolated, no map |
 
 To re-render panels (requires PyMOL and CCP4 maps from validation).
-All scripts use paths relative to the `paper/` directory:
+All scripts use paths relative to the repository root:
 
 ```bash
-cd paper
 pymol figure4_difference_refinement/pymol_scripts/figure4_ligand.pml   # panels 11-13
 pymol figure4_difference_refinement/pymol_scripts/figure4_pocket.pml   # panels 21-23
 ```
