@@ -22,9 +22,16 @@ the author accepted manuscript.
 
 ## Versions
 
-The tag **`jac-accepted`** is the state the published figures were made from, and runs
-against TorchRef v0.6.4. Commits after it on `main` follow later TorchRef API changes
-and need a newer TorchRef.
+This repository is pinned to **TorchRef v0.6.4**, the version the paper describes
+(`requirements.txt`). `main` keeps the scripts in their v0.6.4 form and takes only fixes;
+the tag **`jac-accepted`** is the exact state the published figures were made from.
+
+TorchRef's API has moved on since v0.6.4. Versions of the scripts that follow TorchRef's
+`main` live on the **`torchref-main`** branch and are not guaranteed to reproduce the
+published numbers.
+
+Until TorchRef v0.7.0 these files lived in the `paper/` folder of the TorchRef repository;
+from v0.7.0 on, this repository is their only home.
 
 ## Setting up
 
@@ -36,12 +43,19 @@ assume that layout.
 git clone --branch v0.6.4 https://github.com/HatPdotS/TorchRef.git
 cd TorchRef
 rm -rf paper    # TorchRef tags from before this split still carry an older copy
-git clone --branch jac-accepted https://github.com/HatPdotS/TorchRef-paper.git paper
-python -m venv .dev && .dev/bin/pip install -e ".[dev]"
+git clone https://github.com/HatPdotS/TorchRef-paper.git paper
+python -m venv .dev && .dev/bin/pip install -e ".[dev]"   # installs TorchRef v0.6.4 from the checkout
 
 module load ccp4                    # REFMAC5 for validation
 module load phenix/phenix-1.20-4459 # PHENIX for comparison refinement
 ```
+
+Without a TorchRef checkout, `pip install -r requirements.txt` installs the pinned
+TorchRef v0.6.4 from PyPI instead; the scripts then run from this repository's root.
+
+`tests/` holds smoke tests of the scripts' helper functions against the installed TorchRef
+(`python -m pytest tests`). They refuse to run against any TorchRef other than the pinned
+version, so a mismatched environment fails loudly rather than producing different numbers.
 
 ## What is and is not in this repository
 
