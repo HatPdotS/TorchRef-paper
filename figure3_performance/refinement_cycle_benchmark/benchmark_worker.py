@@ -25,7 +25,6 @@ from pathlib import Path
 n_threads = int(os.environ.get("TORCHREF_NUM_THREADS", 1))
 
 import torch
-
 from torchref.refinement import LBFGSRefinement
 
 
@@ -119,7 +118,7 @@ def run_benchmark(n_iterations: int, n_warmup: int, device_str: str = "cpu",
 
     # Collect metadata
     n_atoms = len(refinement.model.pdb)
-    hkl = refinement.reflection_data.hkl
+    hkl, _, _, _ = refinement.reflection_data()
     n_reflections = hkl.shape[0]
     d_min = float(refinement.reflection_data.d_min)
     target_names = list(loss_state.targets.keys())
